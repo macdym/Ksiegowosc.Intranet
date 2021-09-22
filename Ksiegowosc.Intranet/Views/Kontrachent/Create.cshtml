@@ -1,0 +1,81 @@
+﻿@model Ksiegowosc.Data.Data.Kontrachent
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_KontrachentLayout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Kontrachent</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NipLubPesel" class="control-label"></label>
+                <input asp-for="NipLubPesel" class="form-control" />
+                <span asp-validation-for="NipLubPesel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Regon" class="control-label"></label>
+                <input asp-for="Regon" class="form-control" />
+                <span asp-validation-for="Regon" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="PlatnikVat" /> @Html.DisplayNameFor(model => model.PlatnikVat)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Nazwa" class="control-label"></label>
+                <input asp-for="Nazwa" class="form-control" />
+                <span asp-validation-for="Nazwa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SkrotNazwy" class="control-label"></label>
+                <input asp-for="SkrotNazwy" class="form-control" />
+                <span asp-validation-for="SkrotNazwy" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Dostawca" /> @Html.DisplayNameFor(model => model.Dostawca)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Odbiorca" /> @Html.DisplayNameFor(model => model.Odbiorca)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Zalezny" /> @Html.DisplayNameFor(model => model.Zalezny)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Bank" class="control-label"></label>
+                <input asp-for="Bank" class="form-control" />
+                <span asp-validation-for="Bank" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumerKonta" class="control-label"></label>
+                <input asp-for="NumerKonta" class="form-control" />
+                <span asp-validation-for="NumerKonta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdAdresu" class="control-label"></label>
+                <input asp-for="IdAdresu" class="form-control" />
+                <span asp-validation-for="IdAdresu" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

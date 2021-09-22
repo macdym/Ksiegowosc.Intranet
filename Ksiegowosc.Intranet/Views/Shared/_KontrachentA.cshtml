@@ -1,0 +1,61 @@
+﻿<div>
+    <a href="#" class="text-decoration-none" id="filters">
+        <div class="pl-2 card bg-primary">
+            <h4 class="text-light">
+                <i class="fa fa-caret-down fa-1 text-light mr-1 mt-2"></i>
+                <small>
+                    Filtry
+                </small>
+            </h4>
+        </div>
+    </a>
+</div>
+<div class="card" id="filters_content" style="display : none">
+    @using (Html.BeginForm("Index", "Contractor", FormMethod.Get))
+    {
+        <div class="card-body row">
+            <div class="col-3">
+                Rodzaj
+
+                @Html.DropDownList("searchModel.Type", new List<SelectListItem>
+               {
+                    new SelectListItem(){Text="",Value=""},
+                    new SelectListItem(){Text="Dostawca",Value="provider"},
+                    new SelectListItem(){Text="Odbiorca",Value="recipient"}
+               }, new { @class = "form-select" })
+            </div>
+            <div class="col-3">
+                Podmiot
+
+                @Html.DropDownList("searchModel.Entity", new List<SelectListItem>
+               {
+                    new SelectListItem(){Text="",Value=""},
+                    new SelectListItem(){Text="Powiązani",Value="true"},
+                    new SelectListItem(){Text="Niepowiązani",Value="false"}
+               }, new { @class = "form-select" })
+            </div>
+            <div class="col-3">
+                Obszar
+
+                @Html.DropDownList("searchModel.Area", new List<SelectListItem>
+               {
+                    new SelectListItem(){Text="",Value=""},
+                    new SelectListItem(){Text="Zagraniczni",Value="other"},
+                    new SelectListItem(){Text="Kajowi",Value="poland"}
+               }, new { @class = "form-select" })
+            </div>
+            <div class="ml-3 mt-3 col-12 form-check ">
+                <input class="form-check-input" type="checkbox" value="" id="uwzglednijRekordy" />
+                <label class="form-check-label" for="uwzglednijRekordy">
+                    Uwzględnij kontrachentów, którzy nie posiadają rekordów uwzględnionych w filtrach
+                </label>
+            </div>
+            <div class="col-12">
+                <div class="float-right">
+                    <a asp-action="Index" type="reset" class="btn btn-secondary"><i class="fa fa-times-circle text-muted"></i></a>
+                    <input type="submit" value="Filtruj" class=" btn btn-success text-light pl-4 pr-4" />
+                </div>
+            </div>
+        </div>
+    }
+</div>

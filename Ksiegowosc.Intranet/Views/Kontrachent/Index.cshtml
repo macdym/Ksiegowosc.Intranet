@@ -1,0 +1,105 @@
+﻿@model IEnumerable<Ksiegowosc.Data.Data.Kontrachent>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_KontrachentLayout.cshtml";
+}
+
+<div>
+    <div>
+        <div>@await Html.PartialAsync("_KontrachentA")</div>
+
+        <div>KontrachentB</div>
+    </div>
+
+    <div>KontrachentC</div>
+</div>
+
+
+@*<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NipLubPesel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Regon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlatnikVat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nazwa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SkrotNazwy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dostawca)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Odbiorca)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Zalezny)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bank)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumerKonta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdAdresu)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NipLubPesel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Regon)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlatnikVat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nazwa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SkrotNazwy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dostawca)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Odbiorca)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Zalezny)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bank)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumerKonta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdAdresu)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdKontrachenta">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdKontrachenta">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdKontrachenta">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>*@

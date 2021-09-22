@@ -1,0 +1,88 @@
+﻿@model Ksiegowosc.Data.Data.Kontrachent
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_KontrachentLayout.cshtml";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Kontrachent</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NipLubPesel)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NipLubPesel)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Regon)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Regon)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PlatnikVat)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PlatnikVat)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Nazwa)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Nazwa)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SkrotNazwy)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SkrotNazwy)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Dostawca)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Dostawca)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Odbiorca)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Odbiorca)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Zalezny)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Zalezny)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Bank)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Bank)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NumerKonta)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NumerKonta)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IdAdresu)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdAdresu)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="IdKontrachenta" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
