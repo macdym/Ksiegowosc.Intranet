@@ -1,0 +1,17 @@
+﻿body {
+    margin: 0;
+    font-family: var(--bs-font-sans-serif);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff5f5f5;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0,0,0,0)
+}
+
+tr:hover,
+tr:focus-within {
+    background: #f2f3ff;
+    outline: none;
+}

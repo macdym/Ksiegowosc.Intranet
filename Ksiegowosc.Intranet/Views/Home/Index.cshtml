@@ -2,7 +2,36 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+    <div id="sidebar" class="flex-column p-3 text-white bg-sidebar min-vh-100" style="width: 380px; display:none">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+            <span class="fs-4">Sidebar</span>
+        </a>
+    </div>
+
+    <div class="m-5 flex-fill">
+        <div>
+
+            <a class="btn btn-lg btn-index ml-3" asp-area="" asp-controller="Kontrachent" asp-action="Index">
+                <div class="mt-5">
+                    <i class="align-middle fa fa-address-card fa-2x"></i>
+                </div>
+                <div>
+                    <small>Kontrachenci</small>
+                </div>
+            </a>
+
+            <a class="btn btn-lg btn-index ml-3" asp-area="" asp-controller="Dokument" asp-action="Index">
+                <div class="mt-5">
+                    <i class="align-middle fa fa-file-word fa-2x"></i>
+                </div>
+                <div>
+                    <small>Dokumenty</small>
+                </div>
+            </a>
+
+        </div>
+    </div>
+
 </div>
