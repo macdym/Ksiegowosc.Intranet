@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Kontrachent</title>
+
+    <!--Fontawesome-->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/all.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/fontawesome.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/brands.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/solid.css" />
+    <!--Fontawesome-->
+    <!--Start css-->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/theme.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/custombody.css" />
+    <link rel="stylesheet" href="~/lib/jquery/dist/jquery.resizableColumns.css" />
+    <!--End css-->
+</head>
+<body class="flex-column">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary text-light border-bottom box-shadow mb-3">
+            <a class="navbar-brand text-light ml-4" asp-area="" asp-controller="Home" asp-action="Index"><h3>NowaKsięgowość.Intranet</h3></a>
+        </nav>
+    </header>
+
+    <main class="vh-100">
+        <div>
+            <div>
+                <div>KontrachentA</div>
+                <div>KontrachentB</div>
+            </div>
+            <div>KontrachentC</div>
+        </div>
+    </main>
+
+    <footer class="footer bg-primary text-light mt-auto">
+        <div class="ml-5">
+            &copy; 2021 - Ksiegowosc.Intranet
+        </div>
+    </footer>
+
+    <!--Start Script-->
+    <script src="~/lib/bootstrap/dist/js/all.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery/dist/jquery.resizableColumns.js"></script>
+    <script src="~/lib/jquery/dist/store.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#view_details').on('click', function () {
+                $('#action_index').toggle();
+                $('#action').toggle();
+                $('#napis_kontrachent').toggle();
+            });
+            $('#filters').on('click', function () {
+                $('#filters_content').toggle();
+            });
+        });
+        $("#dropDown").change(function () {
+            $("#pageSize").submit();
+        });
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+
+        $(function () {
+            $("table").resizableColumns();
+        });
+        $(function () {
+            var current = location.pathname;
+            $('.nav-tabs li a').each(function () {
+                var $this = $(this);
+                if (current.indexOf($this.attr('href')) !== -1) {
+                    $this.addClass('active');
+                }
+            })
+        });
+        $(function () {
+            $(".table").on("click", "tr[role=\"button\"]", function (e) {
+                window.location = $(this).data("href");
+            });
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+    <!--End Script-->
+</body>
+</html>
