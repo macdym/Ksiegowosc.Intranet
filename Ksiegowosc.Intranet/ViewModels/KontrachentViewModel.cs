@@ -9,6 +9,6 @@ namespace Ksiegowosc.Intranet.ViewModels
 {
     public class KontrachentViewModel
     {
-        public PagedList<KontrachentDto> Kontrachenci { get; set; }
+        public IPagedList<KontrachentDto> Kontrachenci { get; set; }
     }
 }

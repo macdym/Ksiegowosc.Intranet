@@ -24,11 +24,11 @@ namespace Ksiegowosc.Intranet.Controllers
         }
 
         // GET: Kontrachent
-        public IActionResult Index(int? page)
+        public async Task<IActionResult> Index(int? page)
         {
             var model = new KontrachentViewModel();
-            var kontrachenciDto = _service.GetKontrachenci().AsQueryable();
-            model.Kontrachenci = new PagedList<KontrachentDto>(kontrachenciDto, (page ?? 1), 3);
+            var kontrachenciDto = _service.GetKontrachenci(page);
+            model.Kontrachenci = await kontrachenciDto;
             return View(model);
         }
 
