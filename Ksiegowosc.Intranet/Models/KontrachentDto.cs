@@ -7,6 +7,7 @@ namespace Ksiegowosc.Intranet.Models
 {
     public class KontrachentDto
     {
+        public int IdKontrachenta { get; set; }
         public string NipLubPesel { get; set; }
         public string Regon { get; set; }
         public bool PlatnikVat { get; set; }

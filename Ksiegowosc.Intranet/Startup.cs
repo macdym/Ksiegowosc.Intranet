@@ -1,4 +1,5 @@
 using Ksiegowosc.Data;
+using Ksiegowosc.Intranet.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,11 +30,15 @@ namespace Ksiegowosc.Intranet
             services.AddRazorPages();
             services.AddDbContext<KsiegowoscDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("KsiegowoscDb")));
+            services.AddAutoMapper(this.GetType().Assembly);
+            services.AddScoped<KsiegowoscIntranetSeeder>();
+            services.AddScoped<IKontrachentService, KontrachentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, KsiegowoscIntranetSeeder seeder)
         {
+            seeder.Seed();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

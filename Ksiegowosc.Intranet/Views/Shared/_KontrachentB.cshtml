@@ -1,1 +1,86 @@
-﻿
+﻿@model X.PagedList.IPagedList<KontrachentDto>
+
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nip
+            </th>
+            <th>
+                Regon
+            </th>
+            <th>
+                Vat
+            </th>
+            <th>
+                Nazwa
+            </th>
+            <th>
+                Skrot
+            </th>
+            <th>
+                Dostawca
+            </th>
+            <th>
+                Odbiorca
+            </th>
+            <th>
+                Zalezny
+            </th>
+            <th>
+                Bank)
+            </th>
+            <th>
+                NumerKonta
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NipLubPesel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Regon)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlatnikVat)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nazwa)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SkrotNazwy)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dostawca)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Odbiorca)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Zalezny)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Bank)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumerKonta)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdKontrachenta">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdKontrachenta">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdKontrachenta">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
