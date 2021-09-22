@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Ksiegowosc.Data;
-using Ksiegowosc.Data.Data;
 using Ksiegowosc.Intranet.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,12 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Ksiegowosc.Intranet.Services
 {
     public interface IKontrachentService
     {
-        Task<IPagedList<KontrachentDto>> GetKontrachenci(int? page);
+        Task<IPagedList<KontrachentDto>> GetKontrachenci(int? page, KontrachentPagingInfo pagingInfo, FiltryKontrachentaDto filtry);
     }
 
     public class KontrachentService : IKontrachentService
@@ -26,107 +26,104 @@ namespace Ksiegowosc.Intranet.Services
             _dbContext = dbContext;
             _mapper = mapper;
         }
-        public async Task<IPagedList<KontrachentDto>> GetKontrachenci(int? page)
+        public async Task<IPagedList<KontrachentDto>> GetKontrachenci(int? page, KontrachentPagingInfo pagingInfo,FiltryKontrachentaDto filtry)
         {
             var kontrachenci =await _dbContext
                 .Kontrachenci
                 .Include(k => k.Adres)
                 .ToListAsync();
 
+            if (filtry != null)
+            {
+                if (filtry.Rodzaj != null)
+                {
+                    if (filtry.Rodzaj == "dostawca")
+                    {
+                        kontrachenci = await kontrachenci.Where(k => k.Dostawca.Equals(true)).ToListAsync();
+                    }
+                    if (filtry.Rodzaj == "odbiorca")
+                    {
+                        kontrachenci =await kontrachenci.Where(k => k.Odbiorca.Equals(true)).ToListAsync();
+                    }
+                }
+                if (filtry.Zalezny != null)
+                {
+                    kontrachenci =await kontrachenci.Where(k => k.Zalezny.Equals(bool.Parse(filtry.Zalezny))).ToListAsync();
+                }
+                if (filtry.PlatnikVat != null)
+                {
+                    kontrachenci = await kontrachenci.Where(k => k.PlatnikVat.Equals(bool.Parse(filtry.PlatnikVat))).ToListAsync();
+                }
+            }
+
+            if (pagingInfo.SearchString != null)
+            {
+                pagingInfo.Page = 1;
+            }
+            else
+            {
+                pagingInfo.SearchString = pagingInfo.CurrentFilter;
+            }
+
+            if (!String.IsNullOrEmpty(pagingInfo.SearchString))
+            {
+                kontrachenci = kontrachenci
+                    .Where(c => c.Nazwa.ToLower().Contains(pagingInfo.SearchString.ToLower())
+                        || c.NipLubPesel.Contains(pagingInfo.SearchString)
+                        || c.Adres.Miasto.ToLower().Contains(pagingInfo.SearchString.ToLower())
+                        || c.Bank.ToLower().Contains(pagingInfo.SearchString.ToLower())).ToList();
+            }
+
+            switch (pagingInfo.SortOrder)
+            {
+                case "name_desc":
+                    kontrachenci = kontrachenci.OrderByDescending(k=>k.Nazwa).ToList();
+                    break;
+                case "Name":
+                    kontrachenci = kontrachenci.OrderBy(k => k.Nazwa).ToList();
+                    break;
+                case "vat_desc":
+                    kontrachenci = kontrachenci.OrderByDescending(k => k.PlatnikVat).ToList();
+                    break;
+                case "Vat":
+                    kontrachenci = kontrachenci.OrderBy(k => k.PlatnikVat).ToList();
+                    break;
+                case "odbiorca_desc":
+                    kontrachenci = kontrachenci.OrderByDescending(k => k.Odbiorca).ToList();
+                    break;
+                case "Odbiorca":
+                    kontrachenci = kontrachenci.OrderBy(k => k.Odbiorca).ToList();
+                    break;
+                case "dostawca_desc":
+                    kontrachenci = kontrachenci.OrderByDescending(k => k.Dostawca).ToList();
+                    break;
+                case "Dostawca":
+                    kontrachenci = kontrachenci.OrderBy(k => k.Dostawca).ToList();
+                    break;
+                case "zalezny_desc":
+                    kontrachenci = kontrachenci.OrderByDescending(k => k.Zalezny).ToList();
+                    break;
+                case "Zalezny":
+                    kontrachenci = kontrachenci.OrderBy(k => k.Zalezny).ToList();
+                    break;
+                case "bank_desc":
+                    kontrachenci = kontrachenci.OrderByDescending(k => k.Bank).ToList();
+                    break;
+                case "Bank":
+                    kontrachenci = kontrachenci.OrderBy(k => k.Bank).ToList();
+                    break;
+                default:
+                    kontrachenci = kontrachenci.OrderByDescending(k => k.IdKontrachenta).ToList();
+                    break;
+            }
+            if (pagingInfo.PageSize == 0)
+            {
+                pagingInfo.PageSize = 10;
+            }
+
             var kontrachenciDto = _mapper.Map<List<KontrachentDto>>(kontrachenci);
 
             return await kontrachenciDto.ToPagedListAsync(page?? 1,10);
         }
-        //private async Task<PagedList> SortPaginateFiltrate(PageViewModel pageViewModel, ContractorSearchModel searchModel)
-        //{
-        //    ContractorBusinessLogic contractorBusinessLogic = new ContractorBusinessLogic(this._context);
-
-        //    ViewBag.CurrentSort = pageViewModel.SortOrder;
-        //    ViewBag.NameSortParm = pageViewModel.SortOrder == "Name" ? "name_desc" : "Name";
-        //    ViewBag.VatSortParm = pageViewModel.SortOrder == "Vat" ? "vat_desc" : "Vat";
-        //    ViewBag.OdbiorcaSortParm = pageViewModel.SortOrder == "Odbiorca" ? "odbiorca_desc" : "Odbiorca";
-        //    ViewBag.DostawcaSortParm = pageViewModel.SortOrder == "Dostawca" ? "dostawca_desc" : "Dostawca";
-        //    ViewBag.ZależnySortParm = pageViewModel.SortOrder == "Zależny" ? "zalezny_desc" : "Zależny";
-        //    ViewBag.BankSortParm = pageViewModel.SortOrder == "Bank" ? "bank_desc" : "Bank";
-        //    ViewBag.MiastoSortParm = pageViewModel.SortOrder == "Miasto" ? "miasto_desc" : "Miasto";
-
-        //    if (pageViewModel.SearchString != null)
-        //    {
-        //        pageViewModel.Page = 1;
-        //    }
-        //    else
-        //    {
-        //        pageViewModel.SearchString = pageViewModel.CurrentFilter;
-        //    }
-
-        //    ViewBag.CurrentFilter = pageViewModel.SearchString;
-
-        //    var contractors = contractorBusinessLogic.GetContractors(searchModel);
-
-        //    if (!String.IsNullOrEmpty(pageViewModel.SearchString))
-        //    {
-        //        contractors = contractors
-        //            .Where(c => c.FullName.ToLower().Contains(pageViewModel.SearchString.ToLower())
-        //                || c.NipOrPesel.Contains(pageViewModel.SearchString)
-        //                || c.City.ToLower().Contains(pageViewModel.SearchString.ToLower())
-        //                || c.Bank.ToLower().Contains(pageViewModel.SearchString.ToLower()));
-        //    }
-
-        //    switch (pageViewModel.SortOrder)
-        //    {
-        //        case "name_desc":
-        //            contractors = contractors.OrderByDescending(s => s.FullName);
-        //            break;
-        //        case "Name":
-        //            contractors = contractors.OrderBy(s => s.FullName);
-        //            break;
-        //        case "vat_desc":
-        //            contractors = contractors.OrderByDescending(s => s.VATpayer);
-        //            break;
-        //        case "Vat":
-        //            contractors = contractors.OrderBy(s => s.VATpayer);
-        //            break;
-        //        case "odbiorca_desc":
-        //            contractors = contractors.OrderByDescending(s => s.Recipient);
-        //            break;
-        //        case "Odbiorca":
-        //            contractors = contractors.OrderBy(s => s.Recipient);
-        //            break;
-        //        case "dostawca_desc":
-        //            contractors = contractors.OrderByDescending(s => s.Provider);
-        //            break;
-        //        case "Dostawca":
-        //            contractors = contractors.OrderBy(s => s.Provider);
-        //            break;
-        //        case "zalezny_desc":
-        //            contractors = contractors.OrderByDescending(s => s.Dependent);
-        //            break;
-        //        case "Zalezny":
-        //            contractors = contractors.OrderBy(s => s.Dependent);
-        //            break;
-        //        case "bank_desc":
-        //            contractors = contractors.OrderByDescending(s => s.Bank);
-        //            break;
-        //        case "Bank":
-        //            contractors = contractors.OrderBy(s => s.Bank);
-        //            break;
-        //        case "miasto_desc":
-        //            contractors = contractors.OrderByDescending(s => s.City);
-        //            break;
-        //        case "Miasto":
-        //            contractors = contractors.OrderBy(s => s.City);
-        //            break;
-        //        default:
-        //            contractors = contractors.OrderByDescending(s => s.ContractorId);
-        //            break;
-        //    }
-        //    if (pageViewModel.PageSize == 0)
-        //    {
-        //        pageViewModel.PageSize = 10;
-        //    }
-        //    int pageNumber = (pageViewModel.Page ?? 1);
-
-        //    return await contractors.ToPagedListAsync(pageNumber, pageViewModel.PageSize);
-        //}
     }
 }

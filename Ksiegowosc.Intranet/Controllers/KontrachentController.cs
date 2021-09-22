@@ -24,11 +24,23 @@ namespace Ksiegowosc.Intranet.Controllers
         }
 
         // GET: Kontrachent
-        public async Task<IActionResult> Index(int? page)
+        public async Task<IActionResult> Index(int? page, KontrachentPagingInfo pagingInfo, FiltryKontrachentaDto filtry)
         {
+            ViewBag.CurrentSort = pagingInfo.SortOrder;
+            ViewBag.NameSortParm = pagingInfo.SortOrder == "Name" ? "name_desc" : "Name";
+            ViewBag.VatSortParm = pagingInfo.SortOrder == "Vat" ? "vat_desc" : "Vat";
+            ViewBag.OdbiorcaSortParm = pagingInfo.SortOrder == "Odbiorca" ? "odbiorca_desc" : "Odbiorca";
+            ViewBag.DostawcaSortParm = pagingInfo.SortOrder == "Dostawca" ? "dostawca_desc" : "Dostawca";
+            ViewBag.ZaleznySortParm = pagingInfo.SortOrder == "Zalezny" ? "zalezny_desc" : "Zalezny";
+            ViewBag.BankSortParm = pagingInfo.SortOrder == "Bank" ? "bank_desc" : "Bank";
+            ViewBag.MiastoSortParm = pagingInfo.SortOrder == "Miasto" ? "miasto_desc" : "Miasto";
+
+            ViewBag.CurrentFilter = pagingInfo.SearchString;
+
             var model = new KontrachentViewModel();
-            var kontrachenciDto = _service.GetKontrachenci(page);
+            var kontrachenciDto = _service.GetKontrachenci(page,pagingInfo,filtry);
             model.Kontrachenci = await kontrachenciDto;
+
             return View(model);
         }
 

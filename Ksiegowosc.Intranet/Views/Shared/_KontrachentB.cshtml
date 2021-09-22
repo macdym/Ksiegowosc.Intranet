@@ -1,85 +1,123 @@
 ﻿@model X.PagedList.IPagedList<KontrachentDto>
 @using X.PagedList.Mvc.Core;
 @using X.PagedList;
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Nip
-            </th>
-            <th>
-                Regon
-            </th>
-            <th>
-                Vat
-            </th>
-            <th>
-                Nazwa
-            </th>
-            <th>
-                Skrot
-            </th>
-            <th>
-                Dostawca
-            </th>
-            <th>
-                Odbiorca
-            </th>
-            <th>
-                Zalezny
-            </th>
-            <th>
-                Bank)
-            </th>
-            <th>
-                NumerKonta
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NipLubPesel)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Regon)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PlatnikVat)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nazwa)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SkrotNazwy)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Dostawca)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Odbiorca)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Zalezny)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Bank)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NumerKonta)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.IdKontrachenta">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.IdKontrachenta">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.IdKontrachenta">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
+<div class="mt-2 ml-3">
+    <a asp-action="Create" class="btn btn-primary text-light pl-4 pr-4" id="dodaj">Dodaj</a>
+</div>
+
+<div class="card-body">
+    <div class="row">
+        <div class="col-2">
+            @using (Html.BeginForm("Index", "Kontrachent", FormMethod.Get))
+            {
+                @Html.DropDownList("pagingInfo.PageSize", new List<SelectListItem>
+               {
+                    new SelectListItem(){Text="10",Value="10", Selected=true},
+                    new SelectListItem(){Text="20",Value="20"},
+                    new SelectListItem(){Text="30",Value="30"}
+               }, new { @class = "form-select", onchange = "this.form.submit()" })
+            }
+        </div>
+        <div class="col-2 pt-2">
+            <span>@(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount (rekordów: @Model.TotalItemCount)</span>
+        </div>
+        <div class="text-center col-4 pt-2">
+            <span>Kontrachenci</span>
+        </div>
+        <div class="col-2 offset-2 mb-2">
+            @using (Html.BeginForm("Index", "Kontrachent", FormMethod.Get))
+            {
+                @Html.TextBox("pagingInfo.SearchString", ViewBag.CurrentFilter as string, new { placeholder = "Szukaj", @class = "form-control search-input" })
+            }
+        </div>
+    </div>
+    <div class="card rounded">
+        <table class="table rounded table-responsive table-hover">
+            <thead class="thead-dark text-truncate">
+                <tr>
+                    <th data-resizable-column-id="nip">
+                        Nip lub pesel
+                    </th>
+                    <th data-resizable-column-id="nazwa">
+                        <div class="d-block">
+                            @Html.ActionLink("Nazwa", "Index", new { sortOrder = ViewBag.NameSortParm }, new { @class = "text-light text-decoration-none d-block" })
+                        </div>
+                    </th>
+                    <th data-resizable-column-id="vat">
+                        <div class="d-block">
+                            @Html.ActionLink("VAT", "Index", new { sortOrder = ViewBag.VatSortParm }, new { @class = "text-light text-decoration-none d-block" })
+                        </div>
+                    </th>
+                    <th data-resizable-column-id="odbiorca">
+                        <div class="d-block">
+                            @Html.ActionLink("Odbiorca", "Index", new { sortOrder = ViewBag.OdbiorcaSortParm }, new { @class = "text-light text-decoration-none d-block" })
+                        </div>
+                    </th>
+                    <th data-resizable-column-id="dostawca">
+                        <div class="d-block">
+                            @Html.ActionLink("Dostawca", "Index", new { sortOrder = ViewBag.DostawcaSortParm }, new { @class = "text-light text-decoration-none d-block" })
+                        </div>
+                    </th>
+                    <th data-resizable-column-id="zalezny">
+                        <div class="d-block">
+                            @Html.ActionLink("Zalezny", "Index", new { sortOrder = ViewBag.ZaleznySortParm }, new { @class = "text-light text-decoration-none d-block" })
+                        </div>
+                    </th>
+                    <th data-resizable-column-id="bank">
+                        <div class="d-block">
+                            @Html.ActionLink("Bank", "Index", new { sortOrder = ViewBag.BankSortParm }, new { @class = "text-light text-decoration-none d-block" })
+                        </div>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="table-bordered">
+                @if (Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NipLubPesel)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Nazwa)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.PlatnikVat)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.Odbiorca)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.Dostawca)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.Zalezny)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Bank)
+                            </td>
+                            <td class="text-center">
+                                <a asp-action="Edit" asp-route-id="@item.IdKontrachenta"><i class="fa fa-pencil-alt text-info"></i></a>
+
+                                @*<a class="pl-3 pr-3" data-html="true" data-toggle="tooltip" data-placement="right"
+                                       title="<br>Dodano przez: @item.CreatedByName </br><br>Data dodania: @item.CreateDate </br>
+                                              <br>Modyfikowano przez:@item.EditedByName </br><br>Data modyfykacji: @item.EditDate</br>">
+                                        <i class="fa fa-info text-success"></i>
+                                    </a>*@
+
+                                <a asp-action="Delete" asp-route-id="@item.IdKontrachenta"><i class="fa fa-trash text-danger"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="float-right mr-1">
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+            new { page, SortOrder = ViewBag.CurrentSort, CurrentFilter = ViewBag.CurrentFilter }))
+    </div>
+</div>
