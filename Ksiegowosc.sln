@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31424.327
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ksiegowosc.Intranet", "Ksiegowosc.Intranet\Ksiegowosc.Intranet.csproj", "{18802936-2155-44DB-8800-6C351308D3C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ksiegowosc.Data", "Ksiegowosc.Data\Ksiegowosc.Data.csproj", "{F0AB0D2A-D7DF-4141-9C3D-7A9264153CB3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18802936-2155-44DB-8800-6C351308D3C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18802936-2155-44DB-8800-6C351308D3C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18802936-2155-44DB-8800-6C351308D3C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18802936-2155-44DB-8800-6C351308D3C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0AB0D2A-D7DF-4141-9C3D-7A9264153CB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0AB0D2A-D7DF-4141-9C3D-7A9264153CB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0AB0D2A-D7DF-4141-9C3D-7A9264153CB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0AB0D2A-D7DF-4141-9C3D-7A9264153CB3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {044BB8A3-44A8-4950-81AA-CC1F82514356}
+	EndGlobalSection
+EndGlobal
