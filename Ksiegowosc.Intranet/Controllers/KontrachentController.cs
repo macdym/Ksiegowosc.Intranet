@@ -5,6 +5,11 @@ using Ksiegowosc.Intranet.ViewModels;
 using Ksiegowosc.Intranet.Models;
 using Microsoft.AspNetCore.Authorization;
 using Ksiegowosc.Data.Data;
+using Newtonsoft.Json;
+using System.IO;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Ksiegowosc.Intranet.Controllers
 {
@@ -63,63 +68,64 @@ namespace Ksiegowosc.Intranet.Controllers
         }
 
         // GET: Kontrachent/Details/5
-        public async Task<PartialViewResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             var kontrachentDto =await _service.GetKontrachentDto(id);
+
             return PartialView(kontrachentDto);
         }
-
-        //// GET: Kontrachent/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var kontrachent = await _context.Kontrachenci.FindAsync(id);
-        //    if (kontrachent == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(kontrachent);
-        //}
-
-        //// POST: Kontrachent/Edit/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("IdKontrachenta,NipLubPesel,Regon,PlatnikVat,Nazwa,SkrotNazwy,Dostawca,Odbiorca,Zalezny,Bank,NumerKonta,IdAdresu")] Kontrachent kontrachent)
-        //{
-        //    if (id != kontrachent.IdKontrachenta)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(kontrachent);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!KontrachentExists(kontrachent.IdKontrachenta))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(kontrachent);
-        //}
-
-
     }
+
+    //// GET: Kontrachent/Edit/5
+    //public async Task<IActionResult> Edit(int? id)
+    //{
+    //    if (id == null)
+    //    {
+    //        return NotFound();
+    //    }
+
+    //    var kontrachent = await _context.Kontrachenci.FindAsync(id);
+    //    if (kontrachent == null)
+    //    {
+    //        return NotFound();
+    //    }
+    //    return View(kontrachent);
+    //}
+
+    //// POST: Kontrachent/Edit/5
+    //// To protect from overposting attacks, enable the specific properties you want to bind to.
+    //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    //[HttpPost]
+    //[ValidateAntiForgeryToken]
+    //public async Task<IActionResult> Edit(int id, [Bind("IdKontrachenta,NipLubPesel,Regon,PlatnikVat,Nazwa,SkrotNazwy,Dostawca,Odbiorca,Zalezny,Bank,NumerKonta,IdAdresu")] Kontrachent kontrachent)
+    //{
+    //    if (id != kontrachent.IdKontrachenta)
+    //    {
+    //        return NotFound();
+    //    }
+
+    //    if (ModelState.IsValid)
+    //    {
+    //        try
+    //        {
+    //            _context.Update(kontrachent);
+    //            await _context.SaveChangesAsync();
+    //        }
+    //        catch (DbUpdateConcurrencyException)
+    //        {
+    //            if (!KontrachentExists(kontrachent.IdKontrachenta))
+    //            {
+    //                return NotFound();
+    //            }
+    //            else
+    //            {
+    //                throw;
+    //            }
+    //        }
+    //        return RedirectToAction(nameof(Index));
+    //    }
+    //    return View(kontrachent);
+    //}
+
+
 }

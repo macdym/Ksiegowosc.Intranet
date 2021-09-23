@@ -59,14 +59,13 @@ function Select(id) {
     $.ajax({
         url: "/Kontrachent/Details",
         type: "GET",
-        dataType: 'JSON',
         data: { id: id },
         success: function (partialViewResult) {
-            convertJsonToHtml
             $("#kontrachentC").html(partialViewResult);
         }
     })
 };
+
 
 //function Select(obj) {
 //    obj.className = 'selected';
