@@ -17,7 +17,7 @@ namespace Ksiegowosc.Intranet.Services
         Task<IPagedList<KontrachentDto>> GetKontrachenci(int? page, KontrachentPagingInfo pagingInfo, FiltryKontrachentaDto filtry);
         Task<IPagedList<KontrachentDto>> Create(CreateKontrachentDto dto);
         Task Delete(int? id);
-        Task<Kontrachent> GetKontrachent(int? id);
+        Task<KontrachentDto> GetKontrachentDto(int? id);
     }
 
     public class KontrachentService : IKontrachentService
@@ -159,14 +159,16 @@ namespace Ksiegowosc.Intranet.Services
             return await kontrachenciDto.ToPagedListAsync(page?? 1,pagingInfo.PageSize);
         }
         #endregion
-        #region GetKontrachent
-        public async Task<Kontrachent> GetKontrachent(int? id)
+        #region GetKontrachentDto
+        public async Task<KontrachentDto> GetKontrachentDto(int? id)
         {
             var kontrachent = await _dbContext
                 .Kontrachenci
                 .FirstOrDefaultAsync(k => k.IdKontrachenta == id);
 
-            return kontrachent;
+            var kontrachentDto = _mapper.Map<KontrachentDto>(kontrachent);
+
+            return kontrachentDto;
         }
         #endregion
     }

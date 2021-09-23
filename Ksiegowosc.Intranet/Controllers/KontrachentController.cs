@@ -62,23 +62,12 @@ namespace Ksiegowosc.Intranet.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //// GET: Kontrachent/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var kontrachent = await _context.Kontrachenci
-        //        .FirstOrDefaultAsync(m => m.IdKontrachenta == id);
-        //    if (kontrachent == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(kontrachent);
-        //}
+        // GET: Kontrachent/Details/5
+        public async Task<PartialViewResult> Details(int? id)
+        {
+            var kontrachentDto =await _service.GetKontrachentDto(id);
+            return PartialView(kontrachentDto);
+        }
 
         //// GET: Kontrachent/Edit/5
         //public async Task<IActionResult> Edit(int? id)

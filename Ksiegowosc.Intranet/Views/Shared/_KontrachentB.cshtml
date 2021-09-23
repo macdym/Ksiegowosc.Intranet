@@ -77,8 +77,8 @@
                 {
                     foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
+                        <tr style="cursor:pointer" onclick="Select(@item.IdKontrachenta);">
+                            <td >
                                 @Html.DisplayFor(modelItem => item.NipLubPesel)
                             </td>
                             <td>
