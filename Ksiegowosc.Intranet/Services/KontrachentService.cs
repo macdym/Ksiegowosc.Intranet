@@ -8,12 +8,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
 using Microsoft.AspNetCore.Mvc;
+using Ksiegowosc.Data.Data;
 
 namespace Ksiegowosc.Intranet.Services
 {
     public interface IKontrachentService
     {
         Task<IPagedList<KontrachentDto>> GetKontrachenci(int? page, KontrachentPagingInfo pagingInfo, FiltryKontrachentaDto filtry);
+        Task<IPagedList<KontrachentDto>> Create(CreateKontrachentDto dto);
     }
 
     public class KontrachentService : IKontrachentService
@@ -26,6 +28,24 @@ namespace Ksiegowosc.Intranet.Services
             _dbContext = dbContext;
             _mapper = mapper;
         }
+        #region Create
+        public async Task<IPagedList<KontrachentDto>> Create(CreateKontrachentDto dto)
+        {
+            var kontrachent = _mapper.Map<Kontrachent>(dto);
+            await _dbContext.Kontrachenci.AddAsync(kontrachent);
+            await _dbContext.SaveChangesAsync();
+
+            var kontrachenci =await _dbContext
+                .Kontrachenci
+                .Include(k=>k.Adres)
+                .ToListAsync();
+
+            var kontrachenciDto = _mapper.Map<List<KontrachentDto>>(kontrachenci);
+
+            return await kontrachenciDto.ToPagedListAsync(1, 10);
+        }
+        #endregion
+        #region GetKontrachenci
         public async Task<IPagedList<KontrachentDto>> GetKontrachenci(int? page, KontrachentPagingInfo pagingInfo,FiltryKontrachentaDto filtry)
         {
             var kontrachenci =await _dbContext
@@ -120,7 +140,8 @@ namespace Ksiegowosc.Intranet.Services
 
             var kontrachenciDto = _mapper.Map<List<KontrachentDto>>(kontrachenci);
 
-            return await kontrachenciDto.ToPagedListAsync(page?? 1,10);
+            return await kontrachenciDto.ToPagedListAsync(page?? 1,pagingInfo.PageSize);
         }
+        #endregion
     }
 }

@@ -1,3 +1,4 @@
+using AspNetCore.Unobtrusive.Ajax;
 using Ksiegowosc.Data;
 using Ksiegowosc.Intranet.Services;
 using Microsoft.AspNetCore.Builder;
@@ -21,6 +22,7 @@ namespace Ksiegowosc.Intranet
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddUnobtrusiveAjax();
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddDbContext<KsiegowoscDbContext>(options =>
@@ -45,7 +47,8 @@ namespace Ksiegowosc.Intranet
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(); 
+            app.UseUnobtrusiveAjax();
 
             app.UseRouting();
 

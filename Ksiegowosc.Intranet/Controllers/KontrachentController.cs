@@ -4,6 +4,7 @@ using Ksiegowosc.Intranet.Services;
 using Ksiegowosc.Intranet.ViewModels;
 using Ksiegowosc.Intranet.Models;
 using Microsoft.AspNetCore.Authorization;
+using Ksiegowosc.Data.Data;
 
 namespace Ksiegowosc.Intranet.Controllers
 {
@@ -37,6 +38,21 @@ namespace Ksiegowosc.Intranet.Controllers
 
             return View(model);
         }
+        // GET: Kontrachent/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+        // POST: Kontrachent/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("NipLubPesel,Regon,PlatnikVat,Nazwa,SkrotNazwy,Dostawca,Odbiorca,Zalezny,Bank,NumerKonta,Ulica,Miasto,KodPocztowy")] CreateKontrachentDto dto)
+        {
+            var model = new KontrachentViewModel();
+            model.Kontrachenci = await _service.Create(dto);
+
+            return View("Index",model);
+        }
 
         //// GET: Kontrachent/Details/5
         //public async Task<IActionResult> Details(int? id)
@@ -53,28 +69,6 @@ namespace Ksiegowosc.Intranet.Controllers
         //        return NotFound();
         //    }
 
-        //    return View(kontrachent);
-        //}
-
-        //// GET: Kontrachent/Create
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
-
-        //// POST: Kontrachent/Create
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("IdKontrachenta,NipLubPesel,Regon,PlatnikVat,Nazwa,SkrotNazwy,Dostawca,Odbiorca,Zalezny,Bank,NumerKonta,IdAdresu")] Kontrachent kontrachent)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(kontrachent);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
         //    return View(kontrachent);
         //}
 

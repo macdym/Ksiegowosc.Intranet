@@ -16,6 +16,22 @@
         </div>
     </div>
     <div class="col-5 pr-4">
-        @await Html.PartialAsync("_KontrachentC",Model.Kontrachent)
+        <div>
+            <a href="#" class="text-decoration-none">
+                <div class="pl-2 card bg-primary">
+                    <h5 class="text-light mt-1">
+                        <small>Kontrachent</small>
+                        <i class="fa fa-expand fa-1 text-light float-right mr-1 mt-1"></i>
+                    </h5>
+                </div>
+            </a>
+        </div>
+        <div class="card" style="min-height:200px;">
+            <div id="kontrachentC" class="row">
+
+            </div>
+        </div>
+        @*@await Html.PartialAsync("_KontrachentC", Model.CreateKontrachentDto)*@
     </div>
+
 </div>
