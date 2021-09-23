@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Ksiegowosc.Data;
-using Ksiegowosc.Data.Data;
 using Ksiegowosc.Intranet.Services;
 using Ksiegowosc.Intranet.ViewModels;
 using Ksiegowosc.Intranet.Models;
-using X.PagedList;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Ksiegowosc.Intranet.Controllers
 {
+    [Authorize]
     public class KontrachentController : Controller
     {
         private readonly IKontrachentService _service;

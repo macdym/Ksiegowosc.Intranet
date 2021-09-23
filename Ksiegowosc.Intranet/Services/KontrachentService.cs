@@ -68,10 +68,7 @@ namespace Ksiegowosc.Intranet.Services
             if (!String.IsNullOrEmpty(pagingInfo.SearchString))
             {
                 kontrachenci = kontrachenci
-                    .Where(c => c.Nazwa.ToLower().Contains(pagingInfo.SearchString.ToLower())
-                        || c.NipLubPesel.Contains(pagingInfo.SearchString)
-                        || c.Adres.Miasto.ToLower().Contains(pagingInfo.SearchString.ToLower())
-                        || c.Bank.ToLower().Contains(pagingInfo.SearchString.ToLower())).ToList();
+                    .Where(k => k.Nazwa.ToLower().Contains(pagingInfo.SearchString.ToLower())).ToList();
             }
 
             switch (pagingInfo.SortOrder)
