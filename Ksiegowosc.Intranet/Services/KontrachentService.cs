@@ -16,6 +16,8 @@ namespace Ksiegowosc.Intranet.Services
     {
         Task<IPagedList<KontrachentDto>> GetKontrachenci(int? page, KontrachentPagingInfo pagingInfo, FiltryKontrachentaDto filtry);
         Task<IPagedList<KontrachentDto>> Create(CreateKontrachentDto dto);
+        Task Delete(int? id);
+        Task<Kontrachent> GetKontrachent(int? id);
     }
 
     public class KontrachentService : IKontrachentService
@@ -28,6 +30,20 @@ namespace Ksiegowosc.Intranet.Services
             _dbContext = dbContext;
             _mapper = mapper;
         }
+        #region Edit
+
+        #endregion
+        #region Delete
+        public async Task Delete(int? id)
+        {
+            var kontrachent = await _dbContext
+                .Kontrachenci
+                .FirstOrDefaultAsync(k=>k.IdKontrachenta == id);
+
+            _dbContext.Kontrachenci.Remove(kontrachent);
+            await _dbContext.SaveChangesAsync();
+        }
+        #endregion
         #region Create
         public async Task<IPagedList<KontrachentDto>> Create(CreateKontrachentDto dto)
         {
@@ -45,7 +61,7 @@ namespace Ksiegowosc.Intranet.Services
             return await kontrachenciDto.ToPagedListAsync(1, 10);
         }
         #endregion
-        #region GetKontrachenci
+        #region GetKontrachenciDto
         public async Task<IPagedList<KontrachentDto>> GetKontrachenci(int? page, KontrachentPagingInfo pagingInfo,FiltryKontrachentaDto filtry)
         {
             var kontrachenci =await _dbContext
@@ -141,6 +157,16 @@ namespace Ksiegowosc.Intranet.Services
             var kontrachenciDto = _mapper.Map<List<KontrachentDto>>(kontrachenci);
 
             return await kontrachenciDto.ToPagedListAsync(page?? 1,pagingInfo.PageSize);
+        }
+        #endregion
+        #region GetKontrachent
+        public async Task<Kontrachent> GetKontrachent(int? id)
+        {
+            var kontrachent = await _dbContext
+                .Kontrachenci
+                .FirstOrDefaultAsync(k => k.IdKontrachenta == id);
+
+            return kontrachent;
         }
         #endregion
     }

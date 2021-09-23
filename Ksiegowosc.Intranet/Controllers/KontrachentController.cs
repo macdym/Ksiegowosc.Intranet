@@ -46,12 +46,20 @@ namespace Ksiegowosc.Intranet.Controllers
         // POST: Kontrachent/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("NipLubPesel,Regon,PlatnikVat,Nazwa,SkrotNazwy,Dostawca,Odbiorca,Zalezny,Bank,NumerKonta,Ulica,Miasto,KodPocztowy")] CreateKontrachentDto dto)
+        public async Task<IActionResult> Create([Bind("NipLubPesel,Regon,PlatnikVat,Nazwa,SkrotNazwy,Dostawca,Odbiorca,Zalezny,Bank,NumerKonta,Ulica,Miasto,KodPocztowy")] CreateKontrachentDto CreateKontrachentDto)
         {
             var model = new KontrachentViewModel();
-            model.Kontrachenci = await _service.Create(dto);
+            model.Kontrachenci = await _service.Create(CreateKontrachentDto);
 
             return View("Index",model);
+        }
+        // POST: Kontrachent/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            await _service.Delete(id);
+            return RedirectToAction(nameof(Index));
         }
 
         //// GET: Kontrachent/Details/5
@@ -123,38 +131,6 @@ namespace Ksiegowosc.Intranet.Controllers
         //    return View(kontrachent);
         //}
 
-        //// GET: Kontrachent/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
 
-        //    var kontrachent = await _context.Kontrachenci
-        //        .FirstOrDefaultAsync(m => m.IdKontrachenta == id);
-        //    if (kontrachent == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(kontrachent);
-        //}
-
-        //// POST: Kontrachent/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var kontrachent = await _context.Kontrachenci.FindAsync(id);
-        //    _context.Kontrachenci.Remove(kontrachent);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool KontrachentExists(int id)
-        //{
-        //    return _context.Kontrachenci.Any(e => e.IdKontrachenta == id);
-        //}
     }
 }

@@ -45,4 +45,7 @@ $(document).ready(function () {
                 $("#kontrachentC").html(partialViewResult);
             })
     });
+    $(document).ready(function () {
+        $("#MyModal").modal();
+    });
 });
