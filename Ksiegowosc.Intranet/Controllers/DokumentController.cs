@@ -35,5 +35,10 @@ namespace Ksiegowosc.Intranet.Controllers
 
             return View(model);
         }
+        // GET: Kontrachent/CreateOrEdit
+        public IActionResult Create()
+        {
+            return PartialView();
+        }
     }
 }
