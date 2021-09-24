@@ -14,10 +14,11 @@ namespace Ksiegowosc.Intranet.Services
 {
     public interface IKontrachentService
     {
-        Task<IPagedList<KontrachentDto>> GetKontrachenci(int? page, KontrachentPagingInfo pagingInfo, FiltryKontrachentaDto filtry);
-        Task<IPagedList<KontrachentDto>> Create(CreateKontrachentDto dto);
-        Task Delete(int? id);
+        Task<IPagedList<KontrachentDto>> GetAll(int? page, KontrachentPagingInfo pagingInfo, FiltryKontrachentaDto filtry);
         Task<KontrachentDto> GetKontrachentDto(int? id);
+        Task Create(CreateKontrachentDto dto);
+        Task Update(KontrachentDto dto);
+        Task Delete(int? id);
     }
 
     public class KontrachentService : IKontrachentService
@@ -45,24 +46,23 @@ namespace Ksiegowosc.Intranet.Services
         }
         #endregion
         #region Create
-        public async Task<IPagedList<KontrachentDto>> Create(CreateKontrachentDto dto)
+        public async Task Create(CreateKontrachentDto dto)
         {
             var kontrachent = _mapper.Map<Kontrachent>(dto);
             await _dbContext.Kontrachenci.AddAsync(kontrachent);
             await _dbContext.SaveChangesAsync();
-
-            var kontrachenci = await _dbContext
-                .Kontrachenci
-                .Include(k => k.Adres)
-                .ToListAsync();
-
-            var kontrachenciDto = _mapper.Map<List<KontrachentDto>>(kontrachenci);
-
-            return await kontrachenciDto.ToPagedListAsync(1, 10);
         }
         #endregion
-        #region GetKontrachenciDto
-        public async Task<IPagedList<KontrachentDto>> GetKontrachenci(int? page, KontrachentPagingInfo pagingInfo, FiltryKontrachentaDto filtry)
+        #region Edit
+        public async Task Update(KontrachentDto dto)
+        {
+            var kontrachentDto = _mapper.Map<Kontrachent>(dto);
+            _dbContext.Update(kontrachentDto);
+            await _dbContext.SaveChangesAsync();
+        }
+        #endregion
+        #region GetAll
+        public async Task<IPagedList<KontrachentDto>> GetAll(int? page, KontrachentPagingInfo pagingInfo, FiltryKontrachentaDto filtry)
         {
             var kontrachenci = await _dbContext
                 .Kontrachenci

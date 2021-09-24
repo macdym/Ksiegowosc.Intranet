@@ -1,82 +1,103 @@
-﻿@model Ksiegowosc.Data.Data.Kontrachent
+﻿@model Ksiegowosc.Intranet.ViewModels.KontrachentViewModel
 
-@{
-    ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_KontrachentLayout.cshtml";
-}
+<div class="card-body m-2">
 
-<h1>Edit</h1>
-
-<h4>Kontrachent</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdKontrachenta" />
-            <div class="form-group">
-                <label asp-for="NipLubPesel" class="control-label"></label>
-                <input asp-for="NipLubPesel" class="form-control" />
-                <span asp-validation-for="NipLubPesel" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Regon" class="control-label"></label>
-                <input asp-for="Regon" class="form-control" />
-                <span asp-validation-for="Regon" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="PlatnikVat" /> @Html.DisplayNameFor(model => model.PlatnikVat)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="Nazwa" class="control-label"></label>
-                <input asp-for="Nazwa" class="form-control" />
-                <span asp-validation-for="Nazwa" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SkrotNazwy" class="control-label"></label>
-                <input asp-for="SkrotNazwy" class="form-control" />
-                <span asp-validation-for="SkrotNazwy" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Dostawca" /> @Html.DisplayNameFor(model => model.Dostawca)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Odbiorca" /> @Html.DisplayNameFor(model => model.Odbiorca)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Zalezny" /> @Html.DisplayNameFor(model => model.Zalezny)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="Bank" class="control-label"></label>
-                <input asp-for="Bank" class="form-control" />
-                <span asp-validation-for="Bank" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NumerKonta" class="control-label"></label>
-                <input asp-for="NumerKonta" class="form-control" />
-                <span asp-validation-for="NumerKonta" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdAdresu" class="control-label"></label>
-                <input asp-for="IdAdresu" class="form-control" />
-                <span asp-validation-for="IdAdresu" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="card-header mb-3">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link text-dark text-decoration-none active">Dane</a>
+            </li>
+        </ul>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div>
+            <div class="form-group">
+                <input type="submit" asp-route-id="@Model.KontrachentDto.IdKontrachenta" value="Zapisz" class="btn btn-success text-light pl-4 pr-4" />
+                <a asp-action="Index" type="reset" class="btn btn-secondary text-muted pl-4 pr-4">
+                    Anuluj
+                </a>
+            </div>
+        </div>
+        <hr />
+        <input type="hidden" asp-for="KontrachentDto.IdKontrachenta"/>
+        <div class="row">
+            <div class="form-group col">
+                <label asp-for="KontrachentDto.NipLubPesel" class="control-label"></label>
+                <input asp-for="KontrachentDto.NipLubPesel" class="form-control" />
+                <span asp-validation-for="KontrachentDto.NipLubPesel" class="text-danger"></span>
+            </div>
+            <div class="form-group col">
+                <label asp-for="KontrachentDto.Regon" class="control-label"></label>
+                <input asp-for="KontrachentDto.Regon" class="form-control" />
+                <span asp-validation-for="KontrachentDto.Regon" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="KontrachentDto.PlatnikVat" /> @Html.DisplayNameFor(model => model.KontrachentDto.PlatnikVat)
+            </label>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="form-group col-9">
+                <label asp-for="KontrachentDto.Nazwa" class="control-label"></label>
+                <input asp-for="KontrachentDto.Nazwa" class="form-control" />
+                <span asp-validation-for="KontrachentDto.Nazwa" class="text-danger"></span>
+            </div>
+            <div class="form-group col-3">
+                <label asp-for="KontrachentDto.SkrotNazwy" class="control-label"></label>
+                <input asp-for="KontrachentDto.SkrotNazwy" class="form-control" />
+                <span asp-validation-for="KontrachentDto.SkrotNazwy" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row ml-2">
+            <div class="form-group form-check col-3">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="KontrachentDto.Dostawca" /> @Html.DisplayNameFor(model => model.KontrachentDto.Dostawca)
+                </label>
+            </div>
+            <div class="form-group form-check col-3">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="KontrachentDto.Odbiorca" /> @Html.DisplayNameFor(model => model.KontrachentDto.Odbiorca)
+                </label>
+            </div>
+            <div class="form-group form-check col-3">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="KontrachentDto.Zalezny" /> @Html.DisplayNameFor(model => model.KontrachentDto.Zalezny)
+                </label>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            <label asp-for="KontrachentDto.Bank" class="control-label"></label>
+            <input asp-for="KontrachentDto.Bank" class="form-control" />
+            <span asp-validation-for="KontrachentDto.Bank" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="KontrachentDto.NumerKonta" class="control-label"></label>
+            <input asp-for="KontrachentDto.NumerKonta" class="form-control" />
+            <span asp-validation-for="KontrachentDto.NumerKonta" class="text-danger"></span>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="form-group col-12">
+                <label asp-for="KontrachentDto.Ulica" class="control-label"></label>
+                <input asp-for="KontrachentDto.Ulica" class="form-control" />
+                <span asp-validation-for="KontrachentDto.Ulica" class="text-danger"></span>
+            </div>
+            <div class="form-group col-8">
+                <label asp-for="KontrachentDto.Miasto" class="control-label"></label>
+                <input asp-for="KontrachentDto.Miasto" class="form-control" />
+                <span asp-validation-for="KontrachentDto.Miasto" class="text-danger"></span>
+            </div>
 
+            <div class="form-group col-4">
+                <label asp-for="KontrachentDto.KodPocztowy" class="control-label"></label>
+                <input asp-for="KontrachentDto.KodPocztowy" class="form-control" />
+                <span asp-validation-for="KontrachentDto.KodPocztowy" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+</div>

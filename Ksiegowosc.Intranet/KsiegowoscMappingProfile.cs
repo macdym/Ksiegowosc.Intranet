@@ -23,6 +23,13 @@ namespace Ksiegowosc.Intranet
                     Miasto=dto.Miasto,
                     KodPocztowy=dto.KodPocztowy
                 }));
+            CreateMap<KontrachentDto, Kontrachent>()
+                .ForMember(m => m.Adres, c => c.MapFrom(dto => new Adres()
+                {
+                    Ulica = dto.Ulica,
+                    Miasto = dto.Miasto,
+                    KodPocztowy = dto.KodPocztowy
+                }));
         }
     }
 }

@@ -29,16 +29,6 @@ $(document).ready(function () {
     $("#MyModal").modal();
 });
 
-$("#createBtn").on("click", function () {
-    $.ajax({
-        url: "/Kontrachent/Create",
-        type: "GET"
-    })
-        .done(function (partialViewResult) {
-            $("#kontrachentC").html(partialViewResult);
-        })
-});
-
 $(function () {
     $(".table").on("click", "tr[role=\"button\"]", function (e) {
         window.location = $(this).data("href");
@@ -55,10 +45,10 @@ $(function () {
     })
 });
 
-function Select(id) {
+function SelectAction(id,action) {
     var idKontrachenta = id;
     $.ajax({
-        url: "/Kontrachent/Details",
+        url: "/Kontrachent/"+action,
         type: "GET",
         data: { id: idKontrachenta }
     }).done(function (partialViewResult) {

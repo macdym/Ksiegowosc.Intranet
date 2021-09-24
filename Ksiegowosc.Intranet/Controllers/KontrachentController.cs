@@ -38,7 +38,7 @@ namespace Ksiegowosc.Intranet.Controllers
             ViewBag.CurrentFilter = pagingInfo.SearchString;
 
             var model = new KontrachentViewModel();
-            var kontrachenciDto = _service.GetKontrachenci(page,pagingInfo,filtry);
+            var kontrachenciDto = _service.GetAll(page,pagingInfo,filtry);
             model.Kontrachenci = await kontrachenciDto;
 
             return View(model);
@@ -53,10 +53,9 @@ namespace Ksiegowosc.Intranet.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("NipLubPesel,Regon,PlatnikVat,Nazwa,SkrotNazwy,Dostawca,Odbiorca,Zalezny,Bank,NumerKonta,Ulica,Miasto,KodPocztowy")] CreateKontrachentDto CreateKontrachentDto)
         {
-            var model = new KontrachentViewModel();
-            model.Kontrachenci = await _service.Create(CreateKontrachentDto);
+            await _service.Create(CreateKontrachentDto);
 
-            return View("Index",model);
+            return RedirectToAction(nameof(Index));
         }
         // POST: Kontrachent/Delete/5
         [HttpPost]
@@ -71,63 +70,29 @@ namespace Ksiegowosc.Intranet.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var model = new KontrachentViewModel();
-            KontrachentDto kontrachentDto =await _service.GetKontrachentDto(id);
+            var kontrachentDto =await _service.GetKontrachentDto(id);
             model.KontrachentDto = kontrachentDto;
 
             return PartialView(model);
         }
+        // GET: Kontrachent/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            var model = new KontrachentViewModel();
+            var kontrachentDto = await _service.GetKontrachentDto(id);
+            model.KontrachentDto = kontrachentDto;
+
+            return PartialView(model);
+        }
+
+        // POST: Kontrachent/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int? id,[Bind("IdKontrachenta,NipLubPesel, Regon, PlatnikVat, Nazwa, SkrotNazwy, Dostawca, Odbiorca, Zalezny, Bank, NumerKonta, Ulica, Miasto, KodPocztowy")] KontrachentDto KontrachentDto)
+        {
+            await _service.Update(KontrachentDto);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
-
-    //// GET: Kontrachent/Edit/5
-    //public async Task<IActionResult> Edit(int? id)
-    //{
-    //    if (id == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    var kontrachent = await _context.Kontrachenci.FindAsync(id);
-    //    if (kontrachent == null)
-    //    {
-    //        return NotFound();
-    //    }
-    //    return View(kontrachent);
-    //}
-
-    //// POST: Kontrachent/Edit/5
-    //// To protect from overposting attacks, enable the specific properties you want to bind to.
-    //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> Edit(int id, [Bind("IdKontrachenta,NipLubPesel,Regon,PlatnikVat,Nazwa,SkrotNazwy,Dostawca,Odbiorca,Zalezny,Bank,NumerKonta,IdAdresu")] Kontrachent kontrachent)
-    //{
-    //    if (id != kontrachent.IdKontrachenta)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    if (ModelState.IsValid)
-    //    {
-    //        try
-    //        {
-    //            _context.Update(kontrachent);
-    //            await _context.SaveChangesAsync();
-    //        }
-    //        catch (DbUpdateConcurrencyException)
-    //        {
-    //            if (!KontrachentExists(kontrachent.IdKontrachenta))
-    //            {
-    //                return NotFound();
-    //            }
-    //            else
-    //            {
-    //                throw;
-    //            }
-    //        }
-    //        return RedirectToAction(nameof(Index));
-    //    }
-    //    return View(kontrachent);
-    //}
-
-
 }
