@@ -24,7 +24,7 @@ namespace Ksiegowosc.Intranet.Controllers
         }
 
         // GET: Kontrachent
-        public async Task<IActionResult> Index(int? page, KontrachentPagingInfo pagingInfo, FiltryKontrachentaDto filtry)
+        public async Task<IActionResult> Index(int? page, PagingInfo pagingInfo, FiltryKontrachentaDto filtry)
         {
             ViewBag.CurrentSort = pagingInfo.SortOrder;
             ViewBag.NameSortParm = pagingInfo.SortOrder == "Name" ? "name_desc" : "Name";
@@ -38,8 +38,8 @@ namespace Ksiegowosc.Intranet.Controllers
             ViewBag.CurrentFilter = pagingInfo.SearchString;
 
             var model = new KontrachentViewModel();
-            var kontrachenciDto = _service.GetAll(page,pagingInfo,filtry);
-            model.Kontrachenci = await kontrachenciDto;
+            var kontrachenciDto = await _service.GetAll(page,pagingInfo,filtry);
+            model.Kontrachenci = kontrachenciDto;
 
             return View(model);
         }        

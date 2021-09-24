@@ -45,18 +45,17 @@ $(function () {
     })
 });
 
-function Action(id,action) {
-    var idKontrachenta = id;
+function Action(id,controller,action) {
     $.ajax({
-        url: "/Kontrachent/"+action,
+        url: controller+"/"+action,
         type: "GET",
-        data: { id: idKontrachenta }
+        data: { id: id }
     }).done(function (partialViewResult) {
-        $("#kontrachentC").html(partialViewResult);
+        $("#partialC").html(partialViewResult);
     })
 };
 
-$('#kontrachentTable tbody tr').click(function () {
+$('#dataTable tbody tr').click(function () {
     $(this).addClass('bg-secondary').siblings().removeClass('bg-secondary');
 }).change(function () {
     $(this).addClass('bg-secondary').siblings().removeClass('bg-secondary');

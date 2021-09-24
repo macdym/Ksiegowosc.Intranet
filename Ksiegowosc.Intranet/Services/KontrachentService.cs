@@ -14,7 +14,7 @@ namespace Ksiegowosc.Intranet.Services
 {
     public interface IKontrachentService
     {
-        Task<IPagedList<KontrachentDto>> GetAll(int? page, KontrachentPagingInfo pagingInfo, FiltryKontrachentaDto filtry);
+        Task<IPagedList<KontrachentDto>> GetAll(int? page, PagingInfo pagingInfo, FiltryKontrachentaDto filtry);
         Task<KontrachentDto> GetKontrachentDto(int? id);
         Task Create(KontrachentDto dto);
         Task Update(KontrachentDto dto);
@@ -62,7 +62,7 @@ namespace Ksiegowosc.Intranet.Services
         }
         #endregion
         #region GetAll
-        public async Task<IPagedList<KontrachentDto>> GetAll(int? page, KontrachentPagingInfo pagingInfo, FiltryKontrachentaDto filtry)
+        public async Task<IPagedList<KontrachentDto>> GetAll(int? page, PagingInfo pagingInfo, FiltryKontrachentaDto filtry)
         {
             var kontrachenci = await _dbContext
                 .Kontrachenci

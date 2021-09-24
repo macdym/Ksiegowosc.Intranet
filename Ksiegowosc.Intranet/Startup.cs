@@ -30,6 +30,7 @@ namespace Ksiegowosc.Intranet
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<KsiegowoscIntranetSeeder>();
             services.AddScoped<IKontrachentService, KontrachentService>();
+            services.AddScoped<IDokumentService, DokumentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

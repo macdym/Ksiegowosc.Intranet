@@ -3,7 +3,7 @@
 @using X.PagedList;
 
 <div class="mt-2 ml-3">
-    <a class="btn btn-primary text-light pl-4 pr-4" onclick="Action(null,'CreateOrEdit')">Dodaj</a>
+    <a class="btn btn-primary text-light pl-4 pr-4" onclick="Action(null,'Kontrachent','CreateOrEdit')">Dodaj</a>
 </div>
 
 <div class="card-body">
@@ -32,7 +32,7 @@
             }
         </div>
     </div>
-        <table id="kontrachentTable" class="table table-hover table-responsive rounded">
+        <table id="dataTable" class="table table-hover table-responsive rounded">
             <thead class="thead-dark">
                 <tr>
                     <th data-resizable-column-id="nip">
@@ -76,7 +76,7 @@
                 {
                     foreach (var item in Model)
                     {
-                        <tr style="cursor:pointer" onclick="Action(@item.IdKontrachenta,'Details');">
+                        <tr style="cursor:pointer" onclick="Action(@item.IdKontrachenta,'Kontrachent','Details');">
                             <td>
                                 @Html.DisplayFor(modelItem => item.NipLubPesel)
                             </td>
@@ -104,7 +104,7 @@
                                 
                                 <form asp-action="Delete" asp-route-id="@item.IdKontrachenta">
 
-                                    <button type="button" style="width:40px;" onclick="Action(@item.IdKontrachenta,'CreateOrEdit');" class="btn-sm btn-light mr-3"><i class="fa fa-pencil-alt text-info"></i></button>
+                                    <button type="button" style="width:40px;" onclick="Action(@item.IdKontrachenta,'Kontrachent','CreateOrEdit');" class="btn-sm btn-light mr-3"><i class="fa fa-pencil-alt text-info"></i></button>
 
                                     <button type="button" style="width:40px;" class="btn-sm btn-light" data-html="true" data-toggle="tooltip" data-placement="right">
                                         <i class="fa fa-info small text-success"></i>

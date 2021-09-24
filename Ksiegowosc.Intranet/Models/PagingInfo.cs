@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Ksiegowosc.Intranet.Models
 {
-    public class KontrachentPagingInfo
+    public class PagingInfo
     {
         public string SortOrder { get; set; }
         public string CurrentFilter { get; set; }

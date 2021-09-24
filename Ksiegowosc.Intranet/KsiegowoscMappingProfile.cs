@@ -23,6 +23,7 @@ namespace Ksiegowosc.Intranet
                     Miasto = dto.Miasto,
                     KodPocztowy = dto.KodPocztowy
                 }));
+            CreateMap<Dokument, DokumentDto>();
         }
     }
 }
