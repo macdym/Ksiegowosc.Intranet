@@ -16,13 +16,6 @@ namespace Ksiegowosc.Intranet
                 .ForMember(dto => dto.Ulica, c => c.MapFrom(s => s.Adres.Ulica))
                 .ForMember(dto => dto.Miasto, c => c.MapFrom(s => s.Adres.Miasto))
                 .ForMember(dto => dto.KodPocztowy, c => c.MapFrom(s => s.Adres.KodPocztowy));
-            CreateMap<CreateKontrachentDto, Kontrachent>()
-                .ForMember(m => m.Adres, c => c.MapFrom(dto => new Adres()
-                {
-                    Ulica=dto.Ulica,
-                    Miasto=dto.Miasto,
-                    KodPocztowy=dto.KodPocztowy
-                }));
             CreateMap<KontrachentDto, Kontrachent>()
                 .ForMember(m => m.Adres, c => c.MapFrom(dto => new Adres()
                 {

@@ -16,7 +16,7 @@ namespace Ksiegowosc.Intranet.Services
     {
         Task<IPagedList<KontrachentDto>> GetAll(int? page, KontrachentPagingInfo pagingInfo, FiltryKontrachentaDto filtry);
         Task<KontrachentDto> GetKontrachentDto(int? id);
-        Task Create(CreateKontrachentDto dto);
+        Task Create(KontrachentDto dto);
         Task Update(KontrachentDto dto);
         Task Delete(int? id);
     }
@@ -46,7 +46,7 @@ namespace Ksiegowosc.Intranet.Services
         }
         #endregion
         #region Create
-        public async Task Create(CreateKontrachentDto dto)
+        public async Task Create(KontrachentDto dto)
         {
             var kontrachent = _mapper.Map<Kontrachent>(dto);
             await _dbContext.Kontrachenci.AddAsync(kontrachent);

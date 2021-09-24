@@ -11,6 +11,5 @@ namespace Ksiegowosc.Intranet.ViewModels
     {
         public IPagedList<KontrachentDto> Kontrachenci { get; set; }
         public KontrachentDto KontrachentDto { get; set; }
-        public CreateKontrachentDto CreateKontrachentDto { get; set; }
     }
 }
