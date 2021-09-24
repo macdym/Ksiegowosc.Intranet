@@ -68,11 +68,13 @@ namespace Ksiegowosc.Intranet.Controllers
         }
 
         // GET: Kontrachent/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            var kontrachentDto =await _service.GetKontrachentDto(id);
+            var model = new KontrachentViewModel();
+            KontrachentDto kontrachentDto =await _service.GetKontrachentDto(id);
+            model.KontrachentDto = kontrachentDto;
 
-            return PartialView(kontrachentDto);
+            return PartialView(model);
         }
     }
 

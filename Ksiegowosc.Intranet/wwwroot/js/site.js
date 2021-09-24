@@ -56,13 +56,13 @@ $(function () {
 });
 
 function Select(id) {
+    var idKontrachenta = id;
     $.ajax({
         url: "/Kontrachent/Details",
         type: "GET",
-        data: { id: id },
-        success: function (partialViewResult) {
-            $("#kontrachentC").html(partialViewResult);
-        }
+        data: { id: idKontrachenta }
+    }).done(function (partialViewResult) {
+        $("#kontrachentC").html(partialViewResult);
     })
 };
 

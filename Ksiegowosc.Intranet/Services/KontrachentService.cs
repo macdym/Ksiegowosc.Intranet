@@ -38,7 +38,7 @@ namespace Ksiegowosc.Intranet.Services
         {
             var kontrachent = await _dbContext
                 .Kontrachenci
-                .FirstOrDefaultAsync(k=>k.IdKontrachenta == id);
+                .FirstOrDefaultAsync(k => k.IdKontrachenta == id);
 
             _dbContext.Kontrachenci.Remove(kontrachent);
             await _dbContext.SaveChangesAsync();
@@ -51,9 +51,9 @@ namespace Ksiegowosc.Intranet.Services
             await _dbContext.Kontrachenci.AddAsync(kontrachent);
             await _dbContext.SaveChangesAsync();
 
-            var kontrachenci =await _dbContext
+            var kontrachenci = await _dbContext
                 .Kontrachenci
-                .Include(k=>k.Adres)
+                .Include(k => k.Adres)
                 .ToListAsync();
 
             var kontrachenciDto = _mapper.Map<List<KontrachentDto>>(kontrachenci);
@@ -62,9 +62,9 @@ namespace Ksiegowosc.Intranet.Services
         }
         #endregion
         #region GetKontrachenciDto
-        public async Task<IPagedList<KontrachentDto>> GetKontrachenci(int? page, KontrachentPagingInfo pagingInfo,FiltryKontrachentaDto filtry)
+        public async Task<IPagedList<KontrachentDto>> GetKontrachenci(int? page, KontrachentPagingInfo pagingInfo, FiltryKontrachentaDto filtry)
         {
-            var kontrachenci =await _dbContext
+            var kontrachenci = await _dbContext
                 .Kontrachenci
                 .Include(k => k.Adres)
                 .ToListAsync();
@@ -79,12 +79,12 @@ namespace Ksiegowosc.Intranet.Services
                     }
                     if (filtry.Rodzaj == "odbiorca")
                     {
-                        kontrachenci =await kontrachenci.Where(k => k.Odbiorca.Equals(true)).ToListAsync();
+                        kontrachenci = await kontrachenci.Where(k => k.Odbiorca.Equals(true)).ToListAsync();
                     }
                 }
                 if (filtry.Zalezny != null)
                 {
-                    kontrachenci =await kontrachenci.Where(k => k.Zalezny.Equals(bool.Parse(filtry.Zalezny))).ToListAsync();
+                    kontrachenci = await kontrachenci.Where(k => k.Zalezny.Equals(bool.Parse(filtry.Zalezny))).ToListAsync();
                 }
                 if (filtry.PlatnikVat != null)
                 {
@@ -110,7 +110,7 @@ namespace Ksiegowosc.Intranet.Services
             switch (pagingInfo.SortOrder)
             {
                 case "name_desc":
-                    kontrachenci = kontrachenci.OrderByDescending(k=>k.Nazwa).ToList();
+                    kontrachenci = kontrachenci.OrderByDescending(k => k.Nazwa).ToList();
                     break;
                 case "Name":
                     kontrachenci = kontrachenci.OrderBy(k => k.Nazwa).ToList();
@@ -156,7 +156,7 @@ namespace Ksiegowosc.Intranet.Services
 
             var kontrachenciDto = _mapper.Map<List<KontrachentDto>>(kontrachenci);
 
-            return await kontrachenciDto.ToPagedListAsync(page?? 1,pagingInfo.PageSize);
+            return await kontrachenciDto.ToPagedListAsync(page ?? 1, pagingInfo.PageSize);
         }
         #endregion
         #region GetKontrachentDto
