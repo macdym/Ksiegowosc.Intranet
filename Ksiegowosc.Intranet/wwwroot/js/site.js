@@ -45,7 +45,7 @@ $(function () {
     })
 });
 
-function SelectAction(id,action) {
+function Action(id,action) {
     var idKontrachenta = id;
     $.ajax({
         url: "/Kontrachent/"+action,
@@ -56,37 +56,27 @@ function SelectAction(id,action) {
     })
 };
 
+$('#kontrachentTable tbody tr').click(function () {
+    $(this).addClass('bg-secondary').siblings().removeClass('bg-secondary');
+}).change(function () {
+    $(this).addClass('bg-secondary').siblings().removeClass('bg-secondary');
+});
 
-//function Select(obj) {
-//    obj.className = 'selected';
-//    var tbl = document.getElementById("table1")
+//function Select(obj, id) {
+//    var idKontrachenta = id;
+//    $(obj).addClass('active').siblings().removeClass('active');
+//    var tbl = document.getElementById("kontrachentGrid")
 //    var firstRow = tbl.getElementsByTagName("TR")[0];
 //    var oldRow = tbl.rows[firstRow.getElementsByTagName("input")[0].value];
 //    if (oldRow != null) {
 //        oldRow.className = '';
 //    }
 //    firstRow.getElementsByTagName("input")[0].value = obj.rowIndex;
+//    $.ajax({
+//        url: "/Kontrachent/Details",
+//        type: "GET",
+//        data: { id: idKontrachenta }
+//    }).done(function (partialViewResult) {
+//        $("#kontrachentC").html(partialViewResult);
+//    })
 //}
-
-
-//obj.className = 'selected';
-//var tbl = document.getElementById("table1")
-//var firstRow = tbl.getElementsByTagName("TR")[0];
-//var oldRow = tbl.rows[firstRow.getElementsByTagName("input")[0].value];
-//if (oldRow != null) {
-//    oldRow.className = '';
-//}
-//firstRow.getElementsByTagName("input")[0].value = obj.rowIndex;
-
-//$(function HighLight(obj) {
-    //    var firstRow = document.getElementById("table1").getElementsByTagName("TR")[0];
-    //    if (firstRow.getElementsByTagName("input")[0].value != obj.rowIndex) {
-    //        obj.className = 'highlight';
-    //    }
-    //});
-    //$(function UnHighLight(obj) {
-    //    var firstRow = document.getElementById("table1").getElementsByTagName("TR")[0];
-    //    if (firstRow.getElementsByTagName("input")[0].value != obj.rowIndex) {
-    //        obj.className = '';
-    //    }
-    //});

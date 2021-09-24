@@ -566,18 +566,17 @@ progress {
 }
 
 .table {
-    --bs-table-bg: #f8f9fa;
     --bs-table-accent-bg: rgba(0,0,0,0);
     --bs-table-striped-color: #212529;
     --bs-table-striped-bg: rgba(0,0,0,0.05);
     --bs-table-active-color: #212529;
     --bs-table-active-bg: rgba(0,0,0,0.1);
     --bs-table-hover-color: #212529;
-    --bs-table-hover-bg: rgba(0,0,0,0.075);
+    --bs-table-hover-bg: rgb(132 132 132 / 0,79);
     width: 100%;
     margin-bottom: 1rem;
     color: #000000;
-    vertical-align: top;
+    vertical-align: central;
     border-color: #6c757d
 }
 
@@ -593,7 +592,7 @@ progress {
     }
 
     .table > thead {
-        vertical-align: bottom
+        vertical-align: central
     }
 
     .table > :not(:last-child) > :last-child > * {
@@ -6429,7 +6428,7 @@ textarea.form-control-lg {
 }
 
 .bg-secondary {
-    background-color: #6c757d !important
+    background-color: #a7a7a7 !important
 }
 
 .bg-success {

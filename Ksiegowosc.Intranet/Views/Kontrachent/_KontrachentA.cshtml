@@ -11,44 +11,38 @@
     </a>
 </div>
 <div class="card" id="filters_content" style="display : none">
-    @using (Html.BeginForm("Index", "Contractor", FormMethod.Get))
+    @using (Html.BeginForm("Index", "Kontrachent", FormMethod.Get))
     {
         <div class="card-body row">
             <div class="col-3">
                 Rodzaj
 
-                @Html.DropDownList("searchModel.Type", new List<SelectListItem>
+                @Html.DropDownList("filtry.PlatnikVat", new List<SelectListItem>
                {
                     new SelectListItem(){Text="",Value=""},
-                    new SelectListItem(){Text="Dostawca",Value="provider"},
-                    new SelectListItem(){Text="Odbiorca",Value="recipient"}
+                    new SelectListItem(){Text="z VAT",Value="true"},
+                    new SelectListItem(){Text="bez VAT",Value="false"}
                }, new { @class = "form-select" })
             </div>
             <div class="col-3">
                 Podmiot
 
-                @Html.DropDownList("searchModel.Entity", new List<SelectListItem>
+                @Html.DropDownList("filtry.Zalezny", new List<SelectListItem>
                {
                     new SelectListItem(){Text="",Value=""},
-                    new SelectListItem(){Text="Powiązani",Value="true"},
-                    new SelectListItem(){Text="Niepowiązani",Value="false"}
+                    new SelectListItem(){Text="powiązani",Value="true"},
+                    new SelectListItem(){Text="niepowiązani",Value="false"}
                }, new { @class = "form-select" })
             </div>
             <div class="col-3">
                 Obszar
 
-                @Html.DropDownList("searchModel.Area", new List<SelectListItem>
+                @Html.DropDownList("filtry.Rodzaj", new List<SelectListItem>
                {
                     new SelectListItem(){Text="",Value=""},
-                    new SelectListItem(){Text="Zagraniczni",Value="other"},
-                    new SelectListItem(){Text="Kajowi",Value="poland"}
+                    new SelectListItem(){Text="odbiorca",Value="odbiorca"},
+                    new SelectListItem(){Text="dostawca",Value="dostawca"}
                }, new { @class = "form-select" })
-            </div>
-            <div class="ml-3 mt-3 col-12 form-check ">
-                <input class="form-check-input" type="checkbox" value="" id="uwzglednijRekordy" />
-                <label class="form-check-label" for="uwzglednijRekordy">
-                    Uwzględnij kontrachentów, którzy nie posiadają rekordów uwzględnionych w filtrach
-                </label>
             </div>
             <div class="col-12">
                 <div class="float-right">
