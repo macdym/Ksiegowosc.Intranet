@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
 using Ksiegowosc.Data;
+using Ksiegowosc.Data.Data;
 using Ksiegowosc.Intranet.Models;
+using Ksiegowosc.Intranet.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
@@ -13,6 +17,7 @@ namespace Ksiegowosc.Intranet.Services
     public interface IDokumentService
     {
         Task<IPagedList<DokumentDto>> GetAll(int? page, PagingInfo pagingInfo);
+        Task Create(CreateDokumentDto dto);
     }
 
     public class DokumentService : IDokumentService
@@ -27,7 +32,47 @@ namespace Ksiegowosc.Intranet.Services
             _mapper = mapper;
             _webHostEnvironment = webHostEnvironment;
         }
+        public async Task Edit(int? id)
+        {
+            var dokument = await _dbContext.Dokumenty.FindAsync(id);
 
+        }
+        #region Create
+        public async Task Create(CreateDokumentDto dto)
+        {
+            Process process = new Process();
+            ProcessStartInfo procesInfo = new ProcessStartInfo();
+            string uniqueFileName = null;
+            string fileName = null;
+            string filePath = null;
+            string uploadsFolder;
+
+            if (dto.Dokument != null)
+            {
+                uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "UploadedFiles");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + dto.Dokument.FileName;
+                filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    dto.Dokument.CopyTo(fileStream);
+                }
+                fileName = Path.GetFileNameWithoutExtension(dto.Dokument.FileName);
+            }
+            var dokument = new Dokument
+            {
+                NazwaDokumentu = fileName,
+                UrlDokumentu = uniqueFileName
+            };
+            _dbContext.Dokumenty.Add(dokument);
+            await _dbContext.SaveChangesAsync();
+
+            procesInfo.UseShellExecute = true;
+            procesInfo.FileName = filePath;
+            process.StartInfo = procesInfo;
+            process.Start();
+            process.WaitForExit();
+        }
+        #endregion
         #region GetAll
         public async Task<IPagedList<DokumentDto>> GetAll(int? page, PagingInfo pagingInfo)
         {

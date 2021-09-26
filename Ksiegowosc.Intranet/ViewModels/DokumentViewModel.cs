@@ -7,7 +7,7 @@ namespace Ksiegowosc.Intranet.ViewModels
     public class DokumentViewModel
     {
         public IPagedList<DokumentDto> Dokumenty { get; set; }
-        public string NazwaDokumentu { get; set; }
-        public IFormFile Dokument { get; set; }
+        public CreateDokumentDto CreateDokumentDto { get; set; }
+        public DokumentDto DokumentDto { get; set; }
     }
 }

@@ -35,10 +35,37 @@ namespace Ksiegowosc.Intranet.Controllers
 
             return View(model);
         }
-        // GET: Kontrachent/CreateOrEdit
+        // GET: Kontrachent/Create
         public IActionResult Create()
         {
             return PartialView();
+        } 
+        // POST: Dokument/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CreateDokumentDto CreateDokumentDto)
+        {
+            await _service.Create(CreateDokumentDto);
+            return RedirectToAction(nameof(Index));
         }
+        //// GET: Dokument/Edit/5
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    //var documentBusinsessLogic = new DocumentBusinessLogic();
+        //    //ViewBag.DocumentModel = await SortPaginateFiltrate(pageViewModel);
+        //    //if (id == null)
+        //    //{
+        //    //    return NotFound();
+        //    //}
+
+        //    //var document = await _context.Documents.FindAsync(id);
+
+        //    //if (document == null)
+        //    //{
+        //    //    return NotFound();
+        //    //}
+        //    //documentBusinsessLogic.EditDocument(document.DocumentUrl);
+        //    return RedirectToAction(nameof(Index));
+        //}
     }
 }
