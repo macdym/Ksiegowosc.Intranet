@@ -61,6 +61,16 @@ $('#dataTable tbody tr').click(function () {
     $(this).addClass('bg-secondary').siblings().removeClass('bg-secondary');
 });
 
+$(document).ready(function () {
+    $('#fileUpload').change(function () {
+        var path = $(this).val();
+        if (path != '' && path != null) {
+            var q = path.substring(path.lastIndexOf('\\') + 1);
+            $('#labelFilename').html(q);
+        }
+    });
+});
+
 //function Select(obj, id) {
 //    var idKontrachenta = id;
 //    $(obj).addClass('active').siblings().removeClass('active');

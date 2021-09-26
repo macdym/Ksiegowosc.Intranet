@@ -35,23 +35,30 @@
     <table id="dataTable" class="table table-hover table-responsive rounded">
         <thead class="thead-dark">
             <tr>
-                <th>
-                    Nazwa dokumentu
+                <th class="text-center">
+                    <div class="d-block">
+                        Nazwa dokumentu
+                    </div>
                 </th>
-                <th>
-                    Plik
+                <th class="text-center">                    
+                    <div class="d-block">
+                        Plik
+                    </div>
                 </th>
-                <th></th>
+                <th class="text-center">
+                    <div class="d-block">
+                    </div>
+                </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="table-bordered">
             @foreach (var item in Model)
             {
                 <tr style="cursor:pointer" onclick="Action(@item.IdDokumentu,'Dokument', 'Details');">
-                    <td>
+                    <td class="text-center">
                         @Html.DisplayFor(modelItem => item.NazwaDokumentu)
                     </td>
-                    <td>
+                    <td class="text-center">
                         @Html.DisplayFor(modelItem => item.UrlDokumentu)
                     </td>
                     <td class="text-center">
@@ -60,7 +67,7 @@
 
                         <form asp-action="Delete" asp-route-id="@item.IdDokumentu">
 
-                            <button type="button" style="width:40px;" onclick="Action(@item.IdDokumentu,'Dokument','CreateOrEdit');" class="btn-sm btn-light mr-3"><i class="fa fa-pencil-alt text-info"></i></button>
+                            <button type="button" style="width:40px;" onclick="Action(@item.IdDokumentu,'Dokument','Edit');" class="btn-sm btn-light mr-3"><i class="fa fa-pencil-alt text-info"></i></button>
 
                             <button type="button" style="width:40px;" class="btn-sm btn-light" data-html="true" data-toggle="tooltip" data-placement="right">
                                 <i class="fa fa-info small text-success"></i>

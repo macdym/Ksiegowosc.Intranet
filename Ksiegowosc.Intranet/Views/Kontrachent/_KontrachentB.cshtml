@@ -35,35 +35,35 @@
         <table id="dataTable" class="table table-hover table-responsive rounded">
             <thead class="thead-dark">
                 <tr>
-                    <th data-resizable-column-id="nip">
+                    <th data-resizable-column-id="nip" class="text-center">
                         Nip lub pesel
                     </th>
-                    <th data-resizable-column-id="nazwa">
+                    <th data-resizable-column-id="nazwa" class="text-center">
                         <div class="d-block">
                             @Html.ActionLink("Nazwa", "Index", new { sortOrder = ViewBag.NameSortParm }, new { @class = "text-light text-decoration-none d-block" })
                         </div>
                     </th>
-                    <th data-resizable-column-id="vat">
+                    <th data-resizable-column-id="vat" class="text-center">
                         <div class="d-block">
                             @Html.ActionLink("VAT", "Index", new { sortOrder = ViewBag.VatSortParm }, new { @class = "text-light text-decoration-none d-block" })
                         </div>
                     </th>
-                    <th data-resizable-column-id="odbiorca">
+                    <th data-resizable-column-id="odbiorca" class="text-center">
                         <div class="d-block">
                             @Html.ActionLink("Odbiorca", "Index", new { sortOrder = ViewBag.OdbiorcaSortParm }, new { @class = "text-light text-decoration-none d-block" })
                         </div>
                     </th>
-                    <th data-resizable-column-id="dostawca">
+                    <th data-resizable-column-id="dostawca" class="text-center">
                         <div class="d-block">
                             @Html.ActionLink("Dostawca", "Index", new { sortOrder = ViewBag.DostawcaSortParm }, new { @class = "text-light text-decoration-none d-block" })
                         </div>
                     </th>
-                    <th data-resizable-column-id="zalezny">
+                    <th data-resizable-column-id="zalezny" class="text-center">
                         <div class="d-block">
                             @Html.ActionLink("Zalezny", "Index", new { sortOrder = ViewBag.ZaleznySortParm }, new { @class = "text-light text-decoration-none d-block" })
                         </div>
                     </th>
-                    <th data-resizable-column-id="bank">
+                    <th data-resizable-column-id="bank" class="text-center">
                         <div class="d-block">
                             @Html.ActionLink("Bank", "Index", new { sortOrder = ViewBag.BankSortParm }, new { @class = "text-light text-decoration-none d-block" })
                         </div>
@@ -77,10 +77,10 @@
                     foreach (var item in Model)
                     {
                         <tr style="cursor:pointer" onclick="Action(@item.IdKontrachenta,'Kontrachent','Details');">
-                            <td>
+                            <td class="text-center">
                                 @Html.DisplayFor(modelItem => item.NipLubPesel)
                             </td>
-                            <td>
+                            <td class="text-center">
                                 @Html.DisplayFor(modelItem => item.Nazwa)
                             </td>
                             <td class="text-center">
@@ -95,7 +95,7 @@
                             <td class="text-center">
                                 @Html.DisplayFor(modelItem => item.Zalezny)
                             </td>
-                            <td>
+                            <td class="text-center">
                                 @Html.DisplayFor(modelItem => item.Bank)
                             </td>
                             <td class="text-center">

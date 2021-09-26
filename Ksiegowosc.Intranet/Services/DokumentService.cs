@@ -18,6 +18,7 @@ namespace Ksiegowosc.Intranet.Services
     {
         Task<IPagedList<DokumentDto>> GetAll(int? page, PagingInfo pagingInfo);
         Task Create(CreateDokumentDto dto);
+        Task Edit(int? id);
     }
 
     public class DokumentService : IDokumentService
@@ -32,20 +33,27 @@ namespace Ksiegowosc.Intranet.Services
             _mapper = mapper;
             _webHostEnvironment = webHostEnvironment;
         }
+        #region Edit
         public async Task Edit(int? id)
         {
+            Process process = new Process();
+            ProcessStartInfo procesInfo = new ProcessStartInfo();
             var dokument = await _dbContext.Dokumenty.FindAsync(id);
-
+            procesInfo.UseShellExecute = true;
+            procesInfo.FileName = dokument.UrlDokumentu;
+            process.StartInfo = procesInfo;
+            process.Start();
+            process.WaitForExit();
         }
+        #endregion
         #region Create
         public async Task Create(CreateDokumentDto dto)
         {
             Process process = new Process();
             ProcessStartInfo procesInfo = new ProcessStartInfo();
-            string uniqueFileName = null;
             string fileName = null;
             string filePath = null;
-            string uploadsFolder;
+            string uploadsFolder, uniqueFileName;
 
             if (dto.Dokument != null)
             {
@@ -61,7 +69,7 @@ namespace Ksiegowosc.Intranet.Services
             var dokument = new Dokument
             {
                 NazwaDokumentu = fileName,
-                UrlDokumentu = uniqueFileName
+                UrlDokumentu = filePath
             };
             _dbContext.Dokumenty.Add(dokument);
             await _dbContext.SaveChangesAsync();

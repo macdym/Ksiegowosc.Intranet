@@ -30,7 +30,7 @@ namespace Ksiegowosc.Intranet.Controllers
             ViewBag.CurrentFilter = pagingInfo.SearchString;
 
             var model = new DokumentViewModel();
-            var dokumentyDto =await _service.GetAll(page, pagingInfo);
+            var dokumentyDto = await _service.GetAll(page, pagingInfo);
             model.Dokumenty = dokumentyDto;
 
             return View(model);
@@ -39,7 +39,7 @@ namespace Ksiegowosc.Intranet.Controllers
         public IActionResult Create()
         {
             return PartialView();
-        } 
+        }
         // POST: Dokument/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -48,24 +48,11 @@ namespace Ksiegowosc.Intranet.Controllers
             await _service.Create(CreateDokumentDto);
             return RedirectToAction(nameof(Index));
         }
-        //// GET: Dokument/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    //var documentBusinsessLogic = new DocumentBusinessLogic();
-        //    //ViewBag.DocumentModel = await SortPaginateFiltrate(pageViewModel);
-        //    //if (id == null)
-        //    //{
-        //    //    return NotFound();
-        //    //}
-
-        //    //var document = await _context.Documents.FindAsync(id);
-
-        //    //if (document == null)
-        //    //{
-        //    //    return NotFound();
-        //    //}
-        //    //documentBusinsessLogic.EditDocument(document.DocumentUrl);
-        //    return RedirectToAction(nameof(Index));
-        //}
+        //POST: Dokument/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            await _service.Edit(id);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
