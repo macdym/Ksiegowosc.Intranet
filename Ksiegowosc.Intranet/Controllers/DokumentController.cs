@@ -54,5 +54,13 @@ namespace Ksiegowosc.Intranet.Controllers
             await _service.Edit(id);
             return RedirectToAction(nameof(Index));
         }
+        // POST: Dokument/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            await _service.Delete(id);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

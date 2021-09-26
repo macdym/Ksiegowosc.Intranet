@@ -19,6 +19,7 @@ namespace Ksiegowosc.Intranet.Services
         Task<IPagedList<DokumentDto>> GetAll(int? page, PagingInfo pagingInfo);
         Task Create(CreateDokumentDto dto);
         Task Edit(int? id);
+        Task Delete(int? id);
     }
 
     public class DokumentService : IDokumentService
@@ -33,6 +34,15 @@ namespace Ksiegowosc.Intranet.Services
             _mapper = mapper;
             _webHostEnvironment = webHostEnvironment;
         }
+        #region Delete
+        public async Task Delete(int? id)
+        {
+            var document = await _dbContext.Dokumenty.FindAsync(id);
+            File.Delete(document.UrlDokumentu);
+            _dbContext.Dokumenty.Remove(document);
+            await _dbContext.SaveChangesAsync();
+        }
+        #endregion
         #region Edit
         public async Task Edit(int? id)
         {
