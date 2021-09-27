@@ -86,7 +86,7 @@ namespace Ksiegowosc.Intranet.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        // GET: DokumentyKontrachenta
+        // GET: Kontrachent/Documents
         public async Task<IActionResult> Documents(int? id,int? page, PagingInfo pagingInfo)
         {
             ViewBag.CurrentSort = pagingInfo.SortOrder;
@@ -102,6 +102,15 @@ namespace Ksiegowosc.Intranet.Controllers
             model.KontrachentDto = kontrachentDto;
 
             return PartialView(model);
+        }
+        // POST: Kontrachent/AddDocument
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddDocument(CreateDokumentDto CreateDokumentDto)
+        {
+            await _service.AddDokument(CreateDokumentDto);
+
+
         }
     }
 }

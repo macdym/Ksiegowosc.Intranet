@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using X.PagedList;
 using Microsoft.AspNetCore.Mvc;
 using Ksiegowosc.Data.Data;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using System.Diagnostics;
 
 namespace Ksiegowosc.Intranet.Services
 {
@@ -21,17 +24,20 @@ namespace Ksiegowosc.Intranet.Services
         Task Delete(int? id);
         Task<IPagedList<DokumentKontrachentaDto>> GetDokumenty(int? page, PagingInfo pagingInfo);
         Task<IEnumerable<DokumentDto>> GetSzablony();
+        Task AddDokument(CreateDokumentDto dto);
     }
 
     public class KontrachentService : IKontrachentService
     {
         private readonly KsiegowoscDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public KontrachentService(KsiegowoscDbContext dbContext, IMapper mapper)
+        public KontrachentService(KsiegowoscDbContext dbContext, IMapper mapper, IWebHostEnvironment webHostEnvironment)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _webHostEnvironment = webHostEnvironment;
         }
         #region Edit
 
@@ -212,6 +218,47 @@ namespace Ksiegowosc.Intranet.Services
             var dokumentyKontrachentaDto = _mapper.Map<List<DokumentKontrachentaDto>>(dokumentyKontrachenta);
 
             return await dokumentyKontrachentaDto.ToPagedListAsync(page ?? 1, pagingInfo.PageSize);
+        }
+        #endregion
+        #region AddDokument
+        public async Task AddDokument(CreateDokumentDto dto)
+        {
+            string fileName = null;
+            string filePath = null;
+            string uploadsFolder, uniqueFileName;
+
+            if (dto.Dokument != null)
+            {
+                uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "UploadedFiles");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + dto.Dokument.FileName;
+                filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    dto.Dokument.CopyTo(fileStream);
+                }
+                fileName = Path.GetFileNameWithoutExtension(dto.Dokument.FileName);
+            }
+            var dokumentKontrachentaDto = new DokumentKontrachentaDto
+            {
+                NazwaDokumentu = fileName,
+                UrlDokumentu = filePath
+            };
+            var dokumentKontrachenta = _mapper.Map<DokumentKontrachenta>(dokumentKontrachentaDto);
+            _dbContext.DokumentyKontrachenta.Add(dokumentKontrachenta);
+            await _dbContext.SaveChangesAsync();
+            RunDocument(filePath);
+        }
+        #endregion
+        #region RunDocument
+        private void RunDocument(string filePath)
+        {
+            Process process = new Process();
+            ProcessStartInfo procesInfo = new ProcessStartInfo();
+            procesInfo.UseShellExecute = true;
+            procesInfo.FileName = filePath;
+            process.StartInfo = procesInfo;
+            process.Start();
+            process.WaitForExit();
         }
         #endregion
     }

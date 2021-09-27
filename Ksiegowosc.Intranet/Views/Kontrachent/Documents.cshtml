@@ -8,7 +8,6 @@
 }
 
 <div class="card-body m-2">
-
     <div class="card-header mb-3">
         <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist" style="cursor:pointer">
             <li class="nav-item" role="presentation">
@@ -19,20 +18,17 @@
             </li>
         </ul>
     </div>
-
     <form asp-action="Documents">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="row">
             <div class="form-group col-8">
-                <select class="form-control form-select" asp-for="DokumentDto.IdDokumentu" asp-items="ViewBag.IdDokumentu"></select>
+                <select class="form-control form-select" asp-for="CreateDokumentDto.IdDokumentu" asp-items="ViewBag.IdDokumentu"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Dodaj +" class="btn btn-success text-light pl-4 pr-4 float-right" action="Documents" />
             </div>
         </div>
     </form>
-
-
         <div class="row">
             <div class="col-2">
                 @using (Html.BeginForm("Index", "Kontrachent", FormMethod.Get))

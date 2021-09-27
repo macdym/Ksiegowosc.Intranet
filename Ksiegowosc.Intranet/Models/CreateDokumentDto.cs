@@ -8,6 +8,7 @@ namespace Ksiegowosc.Intranet.Models
 {
     public class CreateDokumentDto
     {
+        public int IdDokumentu { get; set; }
         public string NazwaDokumentu { get; set; }
         public IFormFile Dokument { get; set; }
     }

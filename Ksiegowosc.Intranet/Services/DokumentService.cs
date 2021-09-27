@@ -35,6 +35,7 @@ namespace Ksiegowosc.Intranet.Services
             _mapper = mapper;
             _webHostEnvironment = webHostEnvironment;
         }
+        #region DownloadDokument
         public async Task<FileDto> DownloadDokument(int? id)
         {
             var dokument = await _dbContext
@@ -42,8 +43,9 @@ namespace Ksiegowosc.Intranet.Services
                 .FindAsync(id);
             byte[] bytes = File.ReadAllBytes(dokument.UrlDokumentu);
             RunDocument(dokument.UrlDokumentu);
-            return new FileDto() { fileBytes = bytes,fileName=dokument.NazwaDokumentu};
+            return new FileDto() { fileBytes = bytes, fileName = dokument.NazwaDokumentu };
         }
+        #endregion
         #region Delete
         public async Task Delete(int? id)
         {
@@ -81,11 +83,12 @@ namespace Ksiegowosc.Intranet.Services
                 }
                 fileName = Path.GetFileNameWithoutExtension(dto.Dokument.FileName);
             }
-            var dokument = new Dokument
+            var dokumentDto = new DokumentDto
             {
                 NazwaDokumentu = fileName,
                 UrlDokumentu = filePath
             };
+            var dokument = _mapper.Map<Dokument>(dokumentDto);
             _dbContext.Dokumenty.Add(dokument);
             await _dbContext.SaveChangesAsync();
             RunDocument(filePath);
@@ -136,7 +139,7 @@ namespace Ksiegowosc.Intranet.Services
         }
         #endregion
         #region RunDocument
-        public void RunDocument(string filePath)
+        private void RunDocument(string filePath)
         {
             Process process = new Process();
             ProcessStartInfo procesInfo = new ProcessStartInfo();
