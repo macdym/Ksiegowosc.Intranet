@@ -23,5 +23,6 @@ namespace Ksiegowosc.Data.Data
         public string NumerKonta { get; set; }
         public int IdAdresu { get; set; }
         public virtual Adres Adres { get; set; }
+        public virtual ICollection<DokumentKontrachenta> DokumentKontrachenta{ get; set; }
     }
 }

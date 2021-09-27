@@ -10,15 +10,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ksiegowosc.Data.Migrations
 {
     [DbContext(typeof(KsiegowoscDbContext))]
-    [Migration("20210922074813_initalMigration")]
-    partial class initalMigration
+    [Migration("20210927064531_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.4")
+                .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Ksiegowosc.Data.Data.Adres", b =>
@@ -123,6 +123,14 @@ namespace Ksiegowosc.Data.Migrations
                     b.Property<DateTime?>("DataDodania")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("IdKontrachenta")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("KontrachentIdKontrachenta")
+                        .HasColumnType("int");
+
+                    b.HasIndex("KontrachentIdKontrachenta");
+
                     b.HasDiscriminator().HasValue("DokumentKontrachenta");
                 });
 
@@ -135,9 +143,23 @@ namespace Ksiegowosc.Data.Migrations
                     b.Navigation("Adres");
                 });
 
+            modelBuilder.Entity("Ksiegowosc.Data.Data.DokumentKontrachenta", b =>
+                {
+                    b.HasOne("Ksiegowosc.Data.Data.Kontrachent", "Kontrachent")
+                        .WithMany("DokumentKontrachenta")
+                        .HasForeignKey("KontrachentIdKontrachenta");
+
+                    b.Navigation("Kontrachent");
+                });
+
             modelBuilder.Entity("Ksiegowosc.Data.Data.Adres", b =>
                 {
                     b.Navigation("Kontrachent");
+                });
+
+            modelBuilder.Entity("Ksiegowosc.Data.Data.Kontrachent", b =>
+                {
+                    b.Navigation("DokumentKontrachenta");
                 });
 #pragma warning restore 612, 618
         }

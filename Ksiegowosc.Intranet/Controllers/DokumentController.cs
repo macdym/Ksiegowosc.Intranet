@@ -62,5 +62,11 @@ namespace Ksiegowosc.Intranet.Controllers
             await _service.Delete(id);
             return RedirectToAction(nameof(Index));
         }
+        // GET: Dokument/DownloadDokument
+        public async Task<IActionResult> DownloadDokument(int? id)
+        {
+            var fileDto = await _service.DownloadDokument(id);
+            return File(fileDto.fileBytes, "application/doc", $"{fileDto.fileName}.doc");
+        }
     }
 }

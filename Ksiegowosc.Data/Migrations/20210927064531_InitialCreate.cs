@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Ksiegowosc.Data.Migrations
 {
-    public partial class initalMigration : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,22 +20,6 @@ namespace Ksiegowosc.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Adres", x => x.IdAdresu);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Dokumenty",
-                columns: table => new
-                {
-                    IdDokumentu = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NazwaDokumentu = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UrlDokumentu = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DataDodania = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Dokumenty", x => x.IdDokumentu);
                 });
 
             migrationBuilder.CreateTable(
@@ -67,6 +51,35 @@ namespace Ksiegowosc.Data.Migrations
                         principalColumn: "IdAdresu",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Dokumenty",
+                columns: table => new
+                {
+                    IdDokumentu = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NazwaDokumentu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UrlDokumentu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataDodania = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IdKontrachenta = table.Column<int>(type: "int", nullable: true),
+                    KontrachentIdKontrachenta = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dokumenty", x => x.IdDokumentu);
+                    table.ForeignKey(
+                        name: "FK_Dokumenty_Kontrachenci_KontrachentIdKontrachenta",
+                        column: x => x.KontrachentIdKontrachenta,
+                        principalTable: "Kontrachenci",
+                        principalColumn: "IdKontrachenta",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Dokumenty_KontrachentIdKontrachenta",
+                table: "Dokumenty",
+                column: "KontrachentIdKontrachenta");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Kontrachenci_AdresIdAdresu",

@@ -10,5 +10,7 @@ namespace Ksiegowosc.Data.Data
     public class DokumentKontrachenta : Dokument
     {
         public DateTime? DataDodania { get; set; }
+        public int IdKontrachenta { get; set; }
+        public virtual Kontrachent Kontrachent { get; set; }
     }
 }
