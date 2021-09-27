@@ -36,16 +36,16 @@
         <thead class="thead-dark">
             <tr>
                 <th class="text-center">
-                    <div class="d-block">
+                    <div data-resizable-column-id="nazwadokumentu" class="d-block" style="min-width:300px;">
                         Nazwa dokumentu
                     </div>
                 </th>
-                <th class="text-center">                    
+                <th data-resizable-column-id="plik" class="text-center" style="min-width:400px;">
                     <div class="d-block">
                         Plik
                     </div>
                 </th>
-                <th class="text-center">
+                <th class="text-center" style="min-width:200px;">
                     <div class="d-block">
                     </div>
                 </th>
@@ -54,12 +54,12 @@
         <tbody class="table-bordered">
             @foreach (var item in Model)
             {
-                <tr style="cursor:pointer" onclick="Action(@item.IdDokumentu,'Dokument', 'Details');">
+                <tr style="cursor:pointer">
                     <td class="text-center">
                         @Html.DisplayFor(modelItem => item.NazwaDokumentu)
                     </td>
                     <td class="text-center">
-                        @Html.DisplayFor(modelItem => item.UrlDokumentu)
+                        <a asp-action="DownloadDokument" asp-route-id="@item.IdDokumentu"><i class="fa fa-file-download text-dark"></i></a>
                     </td>
                     <td class="text-center">
                         @*title="<br>Dodano przez: @item.CreatedByName </br><br>Data dodania: @item.CreateDate </br>
