@@ -1,0 +1,103 @@
+﻿@model Ksiegowosc.Intranet.ViewModels.KontrachentViewModel
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+
+@{
+    var dto = Model.KontrachentDto;
+    var pageDto = Model.DokumentyKontrachenta;
+}
+
+<div class="card-body m-2">
+
+    <div class="card-header mb-3">
+        <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist" style="cursor:pointer">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link text-dark text-decoration-none" onclick="Action(@dto.IdKontrachenta,'Kontrachent','Details')">Dane</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link text-dark text-decoration-none active" onclick="Action(@dto.IdKontrachenta,'Kontrachent','Documents')">Dokumenty</a>
+            </li>
+        </ul>
+    </div>
+
+    <form asp-action="Documents">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <div class="form-group col-8">
+                <select class="form-control form-select" asp-for="DokumentDto.IdDokumentu" asp-items="ViewBag.IdDokumentu"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Dodaj +" class="btn btn-success text-light pl-4 pr-4 float-right" action="Documents" />
+            </div>
+        </div>
+    </form>
+
+
+        <div class="row">
+            <div class="col-2">
+                @using (Html.BeginForm("Index", "Kontrachent", FormMethod.Get))
+                {
+                    @Html.DropDownList("pagingInfo.PageSize", new List<SelectListItem>
+                   {
+                        new SelectListItem(){Text="10",Value="10", Selected=true},
+                        new SelectListItem(){Text="20",Value="20"},
+                        new SelectListItem(){Text="30",Value="30"}
+                   }, new { @class = "form-select", onchange = "this.form.submit()" })
+                }
+            </div>
+            <div class="col-3 pt-2">
+                <span>@(pageDto.PageCount < pageDto.PageNumber ? 0 : pageDto.PageNumber) / @pageDto.PageCount (rekordów: @pageDto.TotalItemCount)</span>
+            </div>
+            <div class="text-center col-2 pt-2">
+                <span>Dokumenty</span>
+            </div>
+            <div class="col-2 offset-3 mb-2">
+                @using (Html.BeginForm("Documents", "Kontrachent", FormMethod.Get))
+                {
+                    @Html.TextBox("pagingInfo.SearchString", ViewBag.CurrentFilter as string, new { placeholder = "Szukaj", @class = "form-control search-input" })
+                }
+            </div>
+        </div>
+        <table id="dataTable" class="table table-hover table-responsive rounded">
+            <thead class="thead-dark">
+                <tr>
+                    <th data-resizable-column-id="docName" class="col-3 text-center" style="min-width: 200px;">
+                        Nazwa
+                    </th>
+                    <th data-resizable-column-id="full_name" class="text-center" style="min-width: 100px;">
+                        Plik
+                    </th>
+                    <th class="col-3"></th>
+                </tr>
+            </thead>
+            <tbody class="table-bordered">
+                @if (Model.DokumentyKontrachenta.Any())
+                {
+                    foreach (var item in Model.DokumentyKontrachenta)
+                    {
+                        <tr style="cursor:pointer">
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.NazwaDokumentu)
+                            </td>
+                            <td class="text-center">
+                                @*dodac kontrachenta*@
+                                <a asp-action="DownloadContractorDocument" asp-controller="Document" asp-route-docId="@item.IdDokumentu" asp-route-id="@Model"><i class="fa fa-file-download text-dark"></i></a>
+                            </td>
+                            <td class="text-center">
+                                <a asp-action="Edit" asp-route-id="@item.IdDokumentu"><i class="fa fa-pencil-alt text-info"></i></a>
+
+                                <a class="pl-3 pr-3" data-html="true" data-toggle="tooltip" data-placement="right" title="<br />Dodano przez:  <br />Data dodania: <br />Modyfikowano przez: <br />Data modyfykacji: ">
+                                    <i class="fa fa-info text-success"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.IdDokumentu"><i class="fa fa-trash text-danger"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <div class="float-right mr-1">
+            @Html.PagedListPager(pageDto, page => Url.Action("Index",
+                new { page, SortOrder = ViewBag.CurrentSort, CurrentFilter = ViewBag.CurrentFilter }))
+        </div>
+</div>

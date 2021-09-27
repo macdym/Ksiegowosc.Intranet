@@ -67,13 +67,13 @@
 
                         <form asp-action="Delete" asp-route-id="@item.IdDokumentu">
 
-                            <button type="button" style="width:40px;" onclick="Action(@item.IdDokumentu,'Dokument','Edit');" class="btn-sm btn-light mr-3"><i class="fa fa-pencil-alt text-info"></i></button>
+                            <button type="button" style="width:30px;" onclick="Action(@item.IdDokumentu,'Dokument','Edit');" class="btn-sm btn-light"><i class="fa fa-pencil-alt text-info"></i></button>
 
-                            <button type="button" style="width:40px;" class="btn-sm btn-light" data-html="true" data-toggle="tooltip" data-placement="right">
+                            <button type="button" style="width:30px;" class="btn-sm btn-light" data-html="true" data-toggle="tooltip" data-placement="right">
                                 <i class="fa fa-info small text-success"></i>
                             </button>
 
-                            <button type="submit" style="width:40px;" class="btn-sm btn-light ml-3"
+                            <button type="submit" style="width:30px;" class="btn-sm btn-light"
                                     onclick="return confirm('Czy na pewno chcesz usunąć dokument?')">
                                 <i class="fa fa-trash-alt small text-danger"></i>
                             </button>

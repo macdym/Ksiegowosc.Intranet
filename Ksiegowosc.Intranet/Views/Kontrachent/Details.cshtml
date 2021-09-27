@@ -1,11 +1,18 @@
 ﻿@model Ksiegowosc.Intranet.ViewModels.KontrachentViewModel
 
+@{ 
+    var dto = Model.KontrachentDto;
+}
+
 <div class="card-body m-2">
 
     <div class="card-header mb-3">
-        <ul class="nav nav-tabs card-header-tabs">
-            <li class="nav-item">
-                <a class="nav-link text-dark text-decoration-none active">Dane</a>
+        <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist" style="cursor:pointer">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link text-dark text-decoration-none active" onclick="Action(@dto.IdKontrachenta,'Kontrachent','Details')">Dane</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link text-dark text-decoration-none" onclick="Action(@dto.IdKontrachenta,'Kontrachent','Documents')">Dokumenty</a>
             </li>
         </ul>
     </div>

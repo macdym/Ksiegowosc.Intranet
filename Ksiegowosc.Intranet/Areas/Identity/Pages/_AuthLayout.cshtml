@@ -26,11 +26,9 @@
     </div>
 </div>
 
-
 @section Scripts{
     @RenderSection("Scripts", required: false)
-
-    <script>
+<script>
     $(function () {
         var current = location.pathname;
         $('.nav-tabs li a').each(function () {
@@ -39,6 +37,6 @@
                 $this.addClass('active');
             }
         })
-    })
-    </script>
+    });
+</script>
 }

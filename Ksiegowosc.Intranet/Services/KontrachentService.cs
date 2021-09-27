@@ -19,6 +19,8 @@ namespace Ksiegowosc.Intranet.Services
         Task Create(KontrachentDto dto);
         Task Update(KontrachentDto dto);
         Task Delete(int? id);
+        Task<IPagedList<DokumentKontrachentaDto>> GetDokumenty(int? page, PagingInfo pagingInfo);
+        Task<IEnumerable<DokumentDto>> GetSzablony();
     }
 
     public class KontrachentService : IKontrachentService
@@ -169,6 +171,47 @@ namespace Ksiegowosc.Intranet.Services
             var kontrachentDto = _mapper.Map<KontrachentDto>(kontrachent);
 
             return kontrachentDto;
+        }
+        #endregion
+        #region GetSzablony
+        public async Task<IEnumerable<DokumentDto>> GetSzablony()
+        {
+            var dokumenty = await _dbContext
+                .Dokumenty
+                .ToListAsync();
+
+            var dokumentyDto = _mapper.Map<List<DokumentDto>>(dokumenty);
+            return dokumentyDto;
+        }
+        #endregion
+        #region GetDokumenty
+        public async Task<IPagedList<DokumentKontrachentaDto>> GetDokumenty(int? page, PagingInfo pagingInfo)
+        {
+            var dokumentyKontrachenta = await _dbContext
+                .DokumentyKontrachenta
+                .Include(dk => dk.Kontrachent)
+                .ToListAsync();
+
+            switch (pagingInfo.SortOrder)
+            {
+                case "name_desc":
+                    dokumentyKontrachenta = dokumentyKontrachenta.OrderByDescending(d => d.NazwaDokumentu).ToList();
+                    break;
+                case "Name":
+                    dokumentyKontrachenta = dokumentyKontrachenta.OrderBy(d => d.NazwaDokumentu).ToList();
+                    break;
+                default:
+                    dokumentyKontrachenta = dokumentyKontrachenta.OrderByDescending(d => d.IdDokumentu).ToList();
+                    break;
+            }
+            if (pagingInfo.PageSize == 0)
+            {
+                pagingInfo.PageSize = 10;
+            }
+
+            var dokumentyKontrachentaDto = _mapper.Map<List<DokumentKontrachentaDto>>(dokumentyKontrachenta);
+
+            return await dokumentyKontrachentaDto.ToPagedListAsync(page ?? 1, pagingInfo.PageSize);
         }
         #endregion
     }

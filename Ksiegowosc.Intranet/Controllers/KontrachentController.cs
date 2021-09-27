@@ -4,12 +4,7 @@ using Ksiegowosc.Intranet.Services;
 using Ksiegowosc.Intranet.ViewModels;
 using Ksiegowosc.Intranet.Models;
 using Microsoft.AspNetCore.Authorization;
-using Ksiegowosc.Data.Data;
-using Newtonsoft.Json;
-using System.IO;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Ksiegowosc.Intranet.Controllers
 {
@@ -90,6 +85,23 @@ namespace Ksiegowosc.Intranet.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+        // GET: DokumentyKontrachenta
+        public async Task<IActionResult> Documents(int? id,int? page, PagingInfo pagingInfo)
+        {
+            ViewBag.CurrentSort = pagingInfo.SortOrder;
+            ViewBag.NameSortParm = pagingInfo.SortOrder == "Name" ? "name_desc" : "Name";
+            ViewBag.CurrentFilter = pagingInfo.SearchString;
+            var szablony = await _service.GetSzablony();
+            ViewData["IdDokumentu"] = new SelectList(szablony, "IdDokumentu", "NazwaDokumentu");
+
+            var model = new KontrachentViewModel();
+            var dokumentyKontrachentaDto = await _service.GetDokumenty(page, pagingInfo);
+            var kontrachentDto = await _service.GetKontrachentDto(id);
+            model.DokumentyKontrachenta = dokumentyKontrachentaDto;
+            model.KontrachentDto = kontrachentDto;
+
+            return PartialView(model);
         }
     }
 }

@@ -45,16 +45,6 @@ $(function () {
     })
 });
 
-function Action(id,controller,action) {
-    $.ajax({
-        url: controller+"/"+action,
-        type: "GET",
-        data: { id: id }
-    }).done(function (partialViewResult) {
-        $("#partialC").html(partialViewResult);
-    })
-};
-
 $('#dataTable tbody tr').click(function () {
     $(this).addClass('bg-secondary').siblings().removeClass('bg-secondary');
 }).change(function () {
@@ -71,6 +61,21 @@ $(document).ready(function () {
     });
 });
 
+$(document).ready(function () {
+    $('#bar').on('click', function () {
+        $('#sidebar').slideToggle("slow");
+    });
+});
+
+function Action(id, controller, action) {
+    $.ajax({
+        url: controller + "/" + action,
+        type: "GET",
+        data: { id: id }
+    }).done(function (partialViewResult) {
+        $("#partialC").html(partialViewResult);
+    })
+};
 //function Select(obj, id) {
 //    var idKontrachenta = id;
 //    $(obj).addClass('active').siblings().removeClass('active');

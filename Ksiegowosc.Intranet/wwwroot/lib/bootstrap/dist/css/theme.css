@@ -1588,7 +1588,7 @@ textarea.form-control-lg {
     font-size: 1rem;
     border-radius: .25rem;
     transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
-    width:110px;
+    width: 110px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2699,11 +2699,6 @@ textarea.form-control-lg {
         border-top-left-radius: .25rem;
         border-top-right-radius: .25rem
     }
-
-        .nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
-            border-color: #e9ecef #e9ecef #dee2e6;
-            isolation: isolate
-        }
 
         .nav-tabs .nav-link.disabled {
             color: #6c757d;
