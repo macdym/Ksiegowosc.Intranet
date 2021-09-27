@@ -24,6 +24,9 @@ namespace Ksiegowosc.Intranet
                     KodPocztowy = dto.KodPocztowy
                 }));
             CreateMap<Dokument, DokumentDto>();
+            CreateMap<DokumentDto, Dokument>();
+            CreateMap<DokumentKontrachentaDto,DokumentKontrachenta>();
+            CreateMap<DokumentKontrachenta, DokumentKontrachentaDto>();
         }
     }
 }

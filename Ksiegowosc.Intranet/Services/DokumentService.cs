@@ -43,6 +43,7 @@ namespace Ksiegowosc.Intranet.Services
                 .FindAsync(id);
             byte[] bytes = File.ReadAllBytes(dokument.UrlDokumentu);
             RunDocument(dokument.UrlDokumentu);
+
             return new FileDto() { fileBytes = bytes, fileName = dokument.NazwaDokumentu };
         }
         #endregion

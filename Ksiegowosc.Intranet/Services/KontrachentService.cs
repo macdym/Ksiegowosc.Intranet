@@ -12,6 +12,8 @@ using Ksiegowosc.Data.Data;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System.Diagnostics;
+using Aspose.Words;
+using Aspose.Words.Replacing;
 
 namespace Ksiegowosc.Intranet.Services
 {
@@ -22,9 +24,9 @@ namespace Ksiegowosc.Intranet.Services
         Task Create(KontrachentDto dto);
         Task Update(KontrachentDto dto);
         Task Delete(int? id);
-        Task<IPagedList<DokumentKontrachentaDto>> GetDokumenty(int? page, PagingInfo pagingInfo);
+        Task<IPagedList<DokumentKontrachentaDto>> GetDokumenty(int id ,int? page, PagingInfo pagingInfo);
         Task<IEnumerable<DokumentDto>> GetSzablony();
-        Task AddDokument(CreateDokumentDto dto);
+        Task<FileDto> AddDokument(DokumentKontrachentaDto dto);
     }
 
     public class KontrachentService : IKontrachentService
@@ -191,11 +193,12 @@ namespace Ksiegowosc.Intranet.Services
         }
         #endregion
         #region GetDokumenty
-        public async Task<IPagedList<DokumentKontrachentaDto>> GetDokumenty(int? page, PagingInfo pagingInfo)
+        public async Task<IPagedList<DokumentKontrachentaDto>> GetDokumenty(int id,int? page, PagingInfo pagingInfo)
         {
             var dokumentyKontrachenta = await _dbContext
                 .DokumentyKontrachenta
                 .Include(dk => dk.Kontrachent)
+                .Where(dk=>dk.IdKontrachenta == id)
                 .ToListAsync();
 
             switch (pagingInfo.SortOrder)
@@ -207,7 +210,7 @@ namespace Ksiegowosc.Intranet.Services
                     dokumentyKontrachenta = dokumentyKontrachenta.OrderBy(d => d.NazwaDokumentu).ToList();
                     break;
                 default:
-                    dokumentyKontrachenta = dokumentyKontrachenta.OrderByDescending(d => d.IdDokumentu).ToList();
+                    dokumentyKontrachenta = dokumentyKontrachenta.OrderByDescending(d => d.IdDokumentuKontrachenta).ToList();
                     break;
             }
             if (pagingInfo.PageSize == 0)
@@ -221,32 +224,58 @@ namespace Ksiegowosc.Intranet.Services
         }
         #endregion
         #region AddDokument
-        public async Task AddDokument(CreateDokumentDto dto)
+        public async Task<FileDto> AddDokument(DokumentKontrachentaDto dto)
         {
             string fileName = null;
             string filePath = null;
             string uploadsFolder, uniqueFileName;
 
-            if (dto.Dokument != null)
+            var dokument =await _dbContext
+                .Dokumenty
+                .FindAsync(dto.IdSzablonu);
+
+            var kontrachent = await _dbContext
+                .Kontrachenci
+                .Include(k=>k.Adres)
+                .FirstOrDefaultAsync(k=>k.IdKontrachenta == dto.IdKontrachenta);
+
+            var kontrachentDto = new KontrachentDto()
+            {
+                NipLubPesel = kontrachent.NipLubPesel ?? "-",
+                Regon = kontrachent.Regon ?? "-",
+                Nazwa = kontrachent.Nazwa ?? "-",
+                SkrotNazwy = kontrachent.SkrotNazwy ?? "-",
+                NumerKonta = kontrachent.NumerKonta ?? "-",
+                Bank = kontrachent.Bank ?? "-",
+                Ulica = kontrachent.Adres.Ulica ?? "-",
+                Miasto = kontrachent.Adres.Miasto ?? "-",
+                KodPocztowy = kontrachent.Adres.KodPocztowy ?? "-"
+            };
+
+            if (dokument != null)
             {
                 uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "UploadedFiles");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + dto.Dokument.FileName;
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + dokument.NazwaDokumentu +".doc";
                 filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    dto.Dokument.CopyTo(fileStream);
-                }
-                fileName = Path.GetFileNameWithoutExtension(dto.Dokument.FileName);
+                fileName = dokument.NazwaDokumentu;
+                GenerateDocument(dokument.UrlDokumentu,filePath, kontrachentDto);
             }
+
             var dokumentKontrachentaDto = new DokumentKontrachentaDto
             {
+                IdKontrachenta = kontrachent.IdKontrachenta,
                 NazwaDokumentu = fileName,
                 UrlDokumentu = filePath
             };
+
             var dokumentKontrachenta = _mapper.Map<DokumentKontrachenta>(dokumentKontrachentaDto);
             _dbContext.DokumentyKontrachenta.Add(dokumentKontrachenta);
             await _dbContext.SaveChangesAsync();
+
+            byte[] bytes = File.ReadAllBytes(dokument.UrlDokumentu);
             RunDocument(filePath);
+
+            return new FileDto() { fileBytes = bytes, fileName = dokumentKontrachentaDto.NazwaDokumentu };
         }
         #endregion
         #region RunDocument
@@ -259,6 +288,32 @@ namespace Ksiegowosc.Intranet.Services
             process.StartInfo = procesInfo;
             process.Start();
             process.WaitForExit();
+        }
+        #endregion
+        #region GenerateDokumentKontrachenta
+        public void GenerateDocument(string urlDokumentu,string filePath,KontrachentDto dto)
+        {
+            Document doc = new Document(urlDokumentu);
+            doc.Range.Replace("@NipLubPesel@", dto.NipLubPesel, new FindReplaceOptions(FindReplaceDirection.Forward));
+            doc.Range.Replace("@Regon@", dto.Regon, new FindReplaceOptions(FindReplaceDirection.Forward));
+            doc.Range.Replace("@Nazwa@", dto.Nazwa, new FindReplaceOptions(FindReplaceDirection.Forward));
+            doc.Range.Replace("@NumerKonta@", dto.NumerKonta, new FindReplaceOptions(FindReplaceDirection.Forward));
+            doc.Range.Replace("@Bank@", dto.Bank, new FindReplaceOptions(FindReplaceDirection.Forward));
+            doc.Range.Replace("@Ulica@", dto.Ulica, new FindReplaceOptions(FindReplaceDirection.Forward));
+            doc.Range.Replace("@KodPocztowy@", dto.KodPocztowy, new FindReplaceOptions(FindReplaceDirection.Forward));
+            doc.Range.Replace("@Miasto@", dto.Miasto, new FindReplaceOptions(FindReplaceDirection.Forward));
+            doc.Save(filePath);
+        }
+        #endregion
+        #region DownloadDokument
+        public async Task<FileDto> DownloadDokument(int? id)
+        {
+            var dokumentKontrachenta = await _dbContext
+                .DokumentyKontrachenta
+                .FindAsync(id);
+            byte[] bytes = File.ReadAllBytes(dokumentKontrachenta.UrlDokumentu);
+            RunDocument(dokumentKontrachenta.UrlDokumentu);
+            return new FileDto() { fileBytes = bytes, fileName = dokumentKontrachenta.NazwaDokumentu };
         }
         #endregion
     }

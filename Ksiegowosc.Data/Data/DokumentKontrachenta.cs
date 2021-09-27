@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace Ksiegowosc.Data.Data
 {
-    public class DokumentKontrachenta : Dokument
+    public class DokumentKontrachenta
     {
+        [Key]
+        public int IdDokumentuKontrachenta { get; set; }
+        public string NazwaDokumentu { get; set; }
+        public string UrlDokumentu { get; set; }
         public DateTime? DataDodania { get; set; }
         public int IdKontrachenta { get; set; }
         public virtual Kontrachent Kontrachent { get; set; }

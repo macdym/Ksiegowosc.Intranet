@@ -23,6 +23,20 @@ namespace Ksiegowosc.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Dokumenty",
+                columns: table => new
+                {
+                    IdDokumentu = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NazwaDokumentu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UrlDokumentu = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Dokumenty", x => x.IdDokumentu);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Kontrachenci",
                 columns: table => new
                 {
@@ -53,23 +67,22 @@ namespace Ksiegowosc.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Dokumenty",
+                name: "DokumentyKontrachenta",
                 columns: table => new
                 {
-                    IdDokumentu = table.Column<int>(type: "int", nullable: false)
+                    IdDokumentuKontrachenta = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NazwaDokumentu = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UrlDokumentu = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DataDodania = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IdKontrachenta = table.Column<int>(type: "int", nullable: true),
+                    IdKontrachenta = table.Column<int>(type: "int", nullable: false),
                     KontrachentIdKontrachenta = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Dokumenty", x => x.IdDokumentu);
+                    table.PrimaryKey("PK_DokumentyKontrachenta", x => x.IdDokumentuKontrachenta);
                     table.ForeignKey(
-                        name: "FK_Dokumenty_Kontrachenci_KontrachentIdKontrachenta",
+                        name: "FK_DokumentyKontrachenta_Kontrachenci_KontrachentIdKontrachenta",
                         column: x => x.KontrachentIdKontrachenta,
                         principalTable: "Kontrachenci",
                         principalColumn: "IdKontrachenta",
@@ -77,8 +90,8 @@ namespace Ksiegowosc.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Dokumenty_KontrachentIdKontrachenta",
-                table: "Dokumenty",
+                name: "IX_DokumentyKontrachenta_KontrachentIdKontrachenta",
+                table: "DokumentyKontrachenta",
                 column: "KontrachentIdKontrachenta");
 
             migrationBuilder.CreateIndex(
@@ -91,6 +104,9 @@ namespace Ksiegowosc.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Dokumenty");
+
+            migrationBuilder.DropTable(
+                name: "DokumentyKontrachenta");
 
             migrationBuilder.DropTable(
                 name: "Kontrachenci");

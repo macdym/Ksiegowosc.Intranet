@@ -47,10 +47,6 @@ namespace Ksiegowosc.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("NazwaDokumentu")
                         .HasColumnType("nvarchar(max)");
 
@@ -60,8 +56,35 @@ namespace Ksiegowosc.Data.Migrations
                     b.HasKey("IdDokumentu");
 
                     b.ToTable("Dokumenty");
+                });
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Dokument");
+            modelBuilder.Entity("Ksiegowosc.Data.Data.DokumentKontrachenta", b =>
+                {
+                    b.Property<int>("IdDokumentuKontrachenta")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("DataDodania")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IdKontrachenta")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("KontrachentIdKontrachenta")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NazwaDokumentu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UrlDokumentu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IdDokumentuKontrachenta");
+
+                    b.HasIndex("KontrachentIdKontrachenta");
+
+                    b.ToTable("DokumentyKontrachenta");
                 });
 
             modelBuilder.Entity("Ksiegowosc.Data.Data.Kontrachent", b =>
@@ -116,20 +139,11 @@ namespace Ksiegowosc.Data.Migrations
 
             modelBuilder.Entity("Ksiegowosc.Data.Data.DokumentKontrachenta", b =>
                 {
-                    b.HasBaseType("Ksiegowosc.Data.Data.Dokument");
+                    b.HasOne("Ksiegowosc.Data.Data.Kontrachent", "Kontrachent")
+                        .WithMany("DokumentKontrachenta")
+                        .HasForeignKey("KontrachentIdKontrachenta");
 
-                    b.Property<DateTime?>("DataDodania")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("IdKontrachenta")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("KontrachentIdKontrachenta")
-                        .HasColumnType("int");
-
-                    b.HasIndex("KontrachentIdKontrachenta");
-
-                    b.HasDiscriminator().HasValue("DokumentKontrachenta");
+                    b.Navigation("Kontrachent");
                 });
 
             modelBuilder.Entity("Ksiegowosc.Data.Data.Kontrachent", b =>
@@ -139,15 +153,6 @@ namespace Ksiegowosc.Data.Migrations
                         .HasForeignKey("AdresIdAdresu");
 
                     b.Navigation("Adres");
-                });
-
-            modelBuilder.Entity("Ksiegowosc.Data.Data.DokumentKontrachenta", b =>
-                {
-                    b.HasOne("Ksiegowosc.Data.Data.Kontrachent", "Kontrachent")
-                        .WithMany("DokumentKontrachenta")
-                        .HasForeignKey("KontrachentIdKontrachenta");
-
-                    b.Navigation("Kontrachent");
                 });
 
             modelBuilder.Entity("Ksiegowosc.Data.Data.Adres", b =>

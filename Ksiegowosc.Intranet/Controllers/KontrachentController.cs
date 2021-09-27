@@ -33,11 +33,11 @@ namespace Ksiegowosc.Intranet.Controllers
             ViewBag.CurrentFilter = pagingInfo.SearchString;
 
             var model = new KontrachentViewModel();
-            var kontrachenciDto = await _service.GetAll(page,pagingInfo,filtry);
+            var kontrachenciDto = await _service.GetAll(page, pagingInfo, filtry);
             model.Kontrachenci = kontrachenciDto;
 
             return View(model);
-        }        
+        }
         // POST: Kontrachent/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -51,7 +51,7 @@ namespace Ksiegowosc.Intranet.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var model = new KontrachentViewModel();
-            var kontrachentDto =await _service.GetKontrachentDto(id);
+            var kontrachentDto = await _service.GetKontrachentDto(id);
             model.KontrachentDto = kontrachentDto;
 
             return PartialView(model);
@@ -87,7 +87,7 @@ namespace Ksiegowosc.Intranet.Controllers
             return RedirectToAction(nameof(Index));
         }
         // GET: Kontrachent/Documents
-        public async Task<IActionResult> Documents(int? id,int? page, PagingInfo pagingInfo)
+        public async Task<IActionResult> Documents(int id, int? page, PagingInfo pagingInfo)
         {
             ViewBag.CurrentSort = pagingInfo.SortOrder;
             ViewBag.NameSortParm = pagingInfo.SortOrder == "Name" ? "name_desc" : "Name";
@@ -96,21 +96,23 @@ namespace Ksiegowosc.Intranet.Controllers
             ViewData["IdDokumentu"] = new SelectList(szablony, "IdDokumentu", "NazwaDokumentu");
 
             var model = new KontrachentViewModel();
-            var dokumentyKontrachentaDto = await _service.GetDokumenty(page, pagingInfo);
+            var dokumentyKontrachentaDto = await _service.GetDokumenty(id,page, pagingInfo);
             var kontrachentDto = await _service.GetKontrachentDto(id);
             model.DokumentyKontrachenta = dokumentyKontrachentaDto;
             model.KontrachentDto = kontrachentDto;
 
             return PartialView(model);
+            //return File()
         }
         // POST: Kontrachent/AddDocument
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddDocument(CreateDokumentDto CreateDokumentDto)
+        public async Task<IActionResult> AddDocument(int id,DokumentKontrachentaDto DokumentKontrachentaDto)
         {
-            await _service.AddDokument(CreateDokumentDto);
-
-
+            DokumentKontrachentaDto.IdKontrachenta = id;
+            var fileDto = await _service.AddDokument(DokumentKontrachentaDto);
+            return File(fileDto.fileBytes, "application/doc", $"{fileDto.fileName}.doc");
+            //zrobic pobieranie osobno
         }
     }
 }
