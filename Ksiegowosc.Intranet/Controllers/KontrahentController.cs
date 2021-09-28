@@ -112,6 +112,12 @@ namespace Ksiegowosc.Intranet.Controllers
             var fileDto = await _service.AddDokument(DokumentKontrahentaDto);
             return File(fileDto.fileBytes, "application/doc", $"{fileDto.fileName}.doc");
         }
+        // GET: Kontrahent/DownloadDocument
+        public async Task<IActionResult> DownloadDokument(int id)
+        {
+            var fileDto = await _service.DownloadDokument(id);
+            return File(fileDto.fileBytes, "application/doc", $"{fileDto.fileName}.doc");
+        }
     }
 }
 

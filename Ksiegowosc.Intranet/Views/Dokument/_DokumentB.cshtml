@@ -62,22 +62,12 @@
                         <a asp-action="DownloadDokument" asp-route-id="@item.IdDokumentu"><i class="fa fa-file-download text-dark"></i></a>
                     </td>
                     <td class="text-center">
-                        @*title="<br>Dodano przez: @item.CreatedByName </br><br>Data dodania: @item.CreateDate </br>
-                            <br>Modyfikowano przez:@item.EditedByName </br><br>Data modyfykacji: @item.EditDate</br>">*@
-
                         <form asp-action="Delete" asp-route-id="@item.IdDokumentu">
 
-                            <button type="button" style="width:30px;" onclick="Action(@item.IdDokumentu,'Dokument','Edit');" class="btn-sm btn-light"><i class="fa fa-pencil-alt text-info"></i></button>
-
-                            <button type="button" style="width:30px;" class="btn-sm btn-light" data-html="true" data-toggle="tooltip" data-placement="right">
-                                <i class="fa fa-info small text-success"></i>
-                            </button>
-
-                            <button type="submit" style="width:30px;" class="btn-sm btn-light"
-                                    onclick="return confirm('Czy na pewno chcesz usunąć dokument?')">
-                                <i class="fa fa-trash-alt small text-danger"></i>
-                            </button>
-
+                            <a onclick="Action(@item.IdDokumentu,'Dokument','Edit');"><i class="fa fa-pencil-alt text-info mr-2"></i></a>
+                            <a data-html="true" data-toggle="tooltip" data-placement="right"><i class="fa fa-info small text-success"></i></a>
+                            <input type="hidden"/>
+                            <a href="#" onclick="this.parentNode.submit()"><i class="fa fa-trash-alt small text-danger ml-2"></i></a>
                         </form>
                     </td>
                 </tr>

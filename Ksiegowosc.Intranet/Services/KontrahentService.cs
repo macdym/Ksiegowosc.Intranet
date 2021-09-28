@@ -26,6 +26,7 @@ namespace Ksiegowosc.Intranet.Services
         Task<IPagedList<DokumentKontrahentaDto>> GetDokumenty(int id ,int? page, PagingInfo pagingInfo);
         Task<IEnumerable<DokumentDto>> GetSzablony();
         Task<FileDto> AddDokument(DokumentKontrahentaDto dto);
+        Task<FileDto> DownloadDokument(int? id);
     }
 
     public class KontrahentService : IKontrahentService

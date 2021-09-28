@@ -56,10 +56,10 @@
         <table class="table table-hover table-responsive rounded">
             <thead class="thead-dark">
                 <tr>
-                    <th data-resizable-column-id="docName" class="col-3 text-center" style="min-width: 200px;">
+                    <th data-resizable-column-id="docName" class="col-3 text-center" style="min-width: 300px;">
                         Nazwa
                     </th>
-                    <th data-resizable-column-id="full_name" class="text-center" style="min-width: 100px;">
+                    <th data-resizable-column-id="full_name" class="text-center" style="min-width: 200px;">
                         Plik
                     </th>
                     <th class="col-3"></th>
@@ -75,17 +75,15 @@
                                 @Html.DisplayFor(modelItem => item.NazwaDokumentu)
                             </td>
                             <td class="text-center">
-                                @*dodac kontrachenta*@
-                                @*<a asp-action="DownloadContractorDocument" asp-controller="Document" asp-route-id="@Model.DokumentKontrachentaDto.IdKontrachenta"><i class="fa fa-file-download text-dark"></i></a>*@
-                                <i class="fa fa-file-download text-dark"></i>
+                                <a asp-action="DownloadDokument" asp-route-id="@item.IdDokumentuKontrahenta"><i class="fa fa-file-download text-dark"></i></a>
                             </td>
                             <td class="text-center">
-                                @*<a asp-action="Edit" asp-route-id="@Model.DokumentKontrachentaDto.IdKontrachenta"><i class="fa fa-pencil-alt text-info"></i></a>*@
-
-                                <a class="pl-3 pr-3" data-html="true" data-toggle="tooltip" data-placement="right" title="<br />Dodano przez:  <br />Data dodania: <br />Modyfikowano przez: <br />Data modyfykacji: ">
-                                    <i class="fa fa-info text-success"></i>
-                                </a>
-                                @*<a asp-action="Delete" asp-route-id="@Model.DokumentKontrachentaDto.IdKontrachenta"><i class="fa fa-trash text-danger"></i></a>*@
+                                <form asp-action="Delete" asp-route-id="@item.IdDokumentuKontrahenta">
+                                    <a onclick="Action(@item.IdDokumentuKontrahenta,'Kontrahent','CreateOrEdit')"><i class="fa fa-pencil-alt text-info mr-2"></i></a>
+                                    <a data-html="true" data-toggle="tooltip" data-placement="right"><i class="fa fa-info small text-success"></i></a>
+                                    <input type="hidden" />
+                                    <a href="#" onclick="this.parentNode.submit()"><i class="fa fa-trash-alt small text-danger ml-2"></i></a>
+                                </form>
                             </td>
                         </tr>
                     }

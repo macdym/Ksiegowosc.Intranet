@@ -7,6 +7,7 @@ namespace Ksiegowosc.Intranet.Models
 {
     public class DokumentKontrahentaDto
     {
+        public int IdDokumentuKontrahenta { get; set; }
         public int IdKontrahenta { get; set; }
         public int IdSzablonu { get; set; }
         public string NazwaDokumentu { get; set; }
