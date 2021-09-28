@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Ksiegowosc.Data;
-using Ksiegowosc.Data.Data;
 using Ksiegowosc.Intranet.Models;
 using Ksiegowosc.Intranet.Services;
 using Ksiegowosc.Intranet.ViewModels;
@@ -35,7 +28,7 @@ namespace Ksiegowosc.Intranet.Controllers
 
             return View(model);
         }
-        // GET: Kontrachent/Create
+        // GET: Dokument/Create
         public IActionResult Create()
         {
             return PartialView();
@@ -49,10 +42,9 @@ namespace Ksiegowosc.Intranet.Controllers
             return RedirectToAction(nameof(Index));
         }
         //POST: Dokument/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task Edit(int? id)
         {
             await _service.Edit(id);
-            return RedirectToAction(nameof(Index));
         }
         // POST: Dokument/Delete/5
         [HttpPost]

@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
-using Microsoft.AspNetCore.Mvc;
 using Ksiegowosc.Data.Data;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
@@ -17,65 +16,62 @@ using Aspose.Words.Replacing;
 
 namespace Ksiegowosc.Intranet.Services
 {
-    public interface IKontrachentService
+    public interface IKontrahentService
     {
-        Task<IPagedList<KontrachentDto>> GetAll(int? page, PagingInfo pagingInfo, FiltryKontrachentaDto filtry);
-        Task<KontrachentDto> GetKontrachentDto(int? id);
-        Task Create(KontrachentDto dto);
-        Task Update(KontrachentDto dto);
+        Task<IPagedList<KontrahentDto>> GetAll(int? page, PagingInfo pagingInfo, FiltryKontrahentaDto filtry);
+        Task<KontrahentDto> GetKontrahentDto(int? id);
+        Task Create(KontrahentDto dto);
+        Task Update(KontrahentDto dto);
         Task Delete(int? id);
-        Task<IPagedList<DokumentKontrachentaDto>> GetDokumenty(int id ,int? page, PagingInfo pagingInfo);
+        Task<IPagedList<DokumentKontrahentaDto>> GetDokumenty(int id ,int? page, PagingInfo pagingInfo);
         Task<IEnumerable<DokumentDto>> GetSzablony();
-        Task<FileDto> AddDokument(DokumentKontrachentaDto dto);
+        Task<FileDto> AddDokument(DokumentKontrahentaDto dto);
     }
 
-    public class KontrachentService : IKontrachentService
+    public class KontrahentService : IKontrahentService
     {
         private readonly KsiegowoscDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public KontrachentService(KsiegowoscDbContext dbContext, IMapper mapper, IWebHostEnvironment webHostEnvironment)
+        public KontrahentService(KsiegowoscDbContext dbContext, IMapper mapper, IWebHostEnvironment webHostEnvironment)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _webHostEnvironment = webHostEnvironment;
         }
-        #region Edit
-
-        #endregion
         #region Delete
         public async Task Delete(int? id)
         {
-            var kontrachent = await _dbContext
-                .Kontrachenci
-                .FirstOrDefaultAsync(k => k.IdKontrachenta == id);
+            var kontrahent = await _dbContext
+                .Kontrahenci
+                .FirstOrDefaultAsync(k => k.IdKontrahenta == id);
 
-            _dbContext.Kontrachenci.Remove(kontrachent);
+            _dbContext.Kontrahenci.Remove(kontrahent);
             await _dbContext.SaveChangesAsync();
         }
         #endregion
         #region Create
-        public async Task Create(KontrachentDto dto)
+        public async Task Create(KontrahentDto dto)
         {
-            var kontrachent = _mapper.Map<Kontrachent>(dto);
-            await _dbContext.Kontrachenci.AddAsync(kontrachent);
+            var kontrahent = _mapper.Map<Kontrahent>(dto);
+            await _dbContext.Kontrahenci.AddAsync(kontrahent);
             await _dbContext.SaveChangesAsync();
         }
         #endregion
         #region Edit
-        public async Task Update(KontrachentDto dto)
+        public async Task Update(KontrahentDto dto)
         {
-            var kontrachentDto = _mapper.Map<Kontrachent>(dto);
-            _dbContext.Update(kontrachentDto);
+            var kontrahentDto = _mapper.Map<Kontrahent>(dto);
+            _dbContext.Update(kontrahentDto);
             await _dbContext.SaveChangesAsync();
         }
         #endregion
         #region GetAll
-        public async Task<IPagedList<KontrachentDto>> GetAll(int? page, PagingInfo pagingInfo, FiltryKontrachentaDto filtry)
+        public async Task<IPagedList<KontrahentDto>> GetAll(int? page, PagingInfo pagingInfo, FiltryKontrahentaDto filtry)
         {
-            var kontrachenci = await _dbContext
-                .Kontrachenci
+            var kontrahenci = await _dbContext
+                .Kontrahenci
                 .Include(k => k.Adres)
                 .ToListAsync();
 
@@ -85,20 +81,20 @@ namespace Ksiegowosc.Intranet.Services
                 {
                     if (filtry.Rodzaj == "dostawca")
                     {
-                        kontrachenci = await kontrachenci.Where(k => k.Dostawca.Equals(true)).ToListAsync();
+                        kontrahenci = await kontrahenci.Where(k => k.Dostawca.Equals(true)).ToListAsync();
                     }
                     if (filtry.Rodzaj == "odbiorca")
                     {
-                        kontrachenci = await kontrachenci.Where(k => k.Odbiorca.Equals(true)).ToListAsync();
+                        kontrahenci = await kontrahenci.Where(k => k.Odbiorca.Equals(true)).ToListAsync();
                     }
                 }
                 if (filtry.Zalezny != null)
                 {
-                    kontrachenci = await kontrachenci.Where(k => k.Zalezny.Equals(bool.Parse(filtry.Zalezny))).ToListAsync();
+                    kontrahenci = await kontrahenci.Where(k => k.Zalezny.Equals(bool.Parse(filtry.Zalezny))).ToListAsync();
                 }
                 if (filtry.PlatnikVat != null)
                 {
-                    kontrachenci = await kontrachenci.Where(k => k.PlatnikVat.Equals(bool.Parse(filtry.PlatnikVat))).ToListAsync();
+                    kontrahenci = await kontrahenci.Where(k => k.PlatnikVat.Equals(bool.Parse(filtry.PlatnikVat))).ToListAsync();
                 }
             }
 
@@ -113,50 +109,50 @@ namespace Ksiegowosc.Intranet.Services
 
             if (!String.IsNullOrEmpty(pagingInfo.SearchString))
             {
-                kontrachenci = kontrachenci
+                kontrahenci = kontrahenci
                     .Where(k => k.Nazwa.ToLower().Contains(pagingInfo.SearchString.ToLower())).ToList();
             }
 
             switch (pagingInfo.SortOrder)
             {
                 case "name_desc":
-                    kontrachenci = kontrachenci.OrderByDescending(k => k.Nazwa).ToList();
+                    kontrahenci = kontrahenci.OrderByDescending(k => k.Nazwa).ToList();
                     break;
                 case "Name":
-                    kontrachenci = kontrachenci.OrderBy(k => k.Nazwa).ToList();
+                    kontrahenci = kontrahenci.OrderBy(k => k.Nazwa).ToList();
                     break;
                 case "vat_desc":
-                    kontrachenci = kontrachenci.OrderByDescending(k => k.PlatnikVat).ToList();
+                    kontrahenci = kontrahenci.OrderByDescending(k => k.PlatnikVat).ToList();
                     break;
                 case "Vat":
-                    kontrachenci = kontrachenci.OrderBy(k => k.PlatnikVat).ToList();
+                    kontrahenci = kontrahenci.OrderBy(k => k.PlatnikVat).ToList();
                     break;
                 case "odbiorca_desc":
-                    kontrachenci = kontrachenci.OrderByDescending(k => k.Odbiorca).ToList();
+                    kontrahenci = kontrahenci.OrderByDescending(k => k.Odbiorca).ToList();
                     break;
                 case "Odbiorca":
-                    kontrachenci = kontrachenci.OrderBy(k => k.Odbiorca).ToList();
+                    kontrahenci = kontrahenci.OrderBy(k => k.Odbiorca).ToList();
                     break;
                 case "dostawca_desc":
-                    kontrachenci = kontrachenci.OrderByDescending(k => k.Dostawca).ToList();
+                    kontrahenci = kontrahenci.OrderByDescending(k => k.Dostawca).ToList();
                     break;
                 case "Dostawca":
-                    kontrachenci = kontrachenci.OrderBy(k => k.Dostawca).ToList();
+                    kontrahenci = kontrahenci.OrderBy(k => k.Dostawca).ToList();
                     break;
                 case "zalezny_desc":
-                    kontrachenci = kontrachenci.OrderByDescending(k => k.Zalezny).ToList();
+                    kontrahenci = kontrahenci.OrderByDescending(k => k.Zalezny).ToList();
                     break;
                 case "Zalezny":
-                    kontrachenci = kontrachenci.OrderBy(k => k.Zalezny).ToList();
+                    kontrahenci = kontrahenci.OrderBy(k => k.Zalezny).ToList();
                     break;
                 case "bank_desc":
-                    kontrachenci = kontrachenci.OrderByDescending(k => k.Bank).ToList();
+                    kontrahenci = kontrahenci.OrderByDescending(k => k.Bank).ToList();
                     break;
                 case "Bank":
-                    kontrachenci = kontrachenci.OrderBy(k => k.Bank).ToList();
+                    kontrahenci = kontrahenci.OrderBy(k => k.Bank).ToList();
                     break;
                 default:
-                    kontrachenci = kontrachenci.OrderByDescending(k => k.IdKontrachenta).ToList();
+                    kontrahenci = kontrahenci.OrderByDescending(k => k.IdKontrahenta).ToList();
                     break;
             }
             if (pagingInfo.PageSize == 0)
@@ -164,21 +160,21 @@ namespace Ksiegowosc.Intranet.Services
                 pagingInfo.PageSize = 10;
             }
 
-            var kontrachenciDto = _mapper.Map<List<KontrachentDto>>(kontrachenci);
+            var kontrahenciDto = _mapper.Map<List<KontrahentDto>>(kontrahenci);
 
-            return await kontrachenciDto.ToPagedListAsync(page ?? 1, pagingInfo.PageSize);
+            return await kontrahenciDto.ToPagedListAsync(page ?? 1, pagingInfo.PageSize);
         }
         #endregion
-        #region GetKontrachentDto
-        public async Task<KontrachentDto> GetKontrachentDto(int? id)
+        #region GetKontrahentDto
+        public async Task<KontrahentDto> GetKontrahentDto(int? id)
         {
-            var kontrachent = await _dbContext
-                .Kontrachenci
-                .FirstOrDefaultAsync(k => k.IdKontrachenta == id);
+            var kontrahent = await _dbContext
+                .Kontrahenci
+                .FirstOrDefaultAsync(k => k.IdKontrahenta == id);
 
-            var kontrachentDto = _mapper.Map<KontrachentDto>(kontrachent);
+            var kontrahentDto = _mapper.Map<KontrahentDto>(kontrahent);
 
-            return kontrachentDto;
+            return kontrahentDto;
         }
         #endregion
         #region GetSzablony
@@ -193,24 +189,24 @@ namespace Ksiegowosc.Intranet.Services
         }
         #endregion
         #region GetDokumenty
-        public async Task<IPagedList<DokumentKontrachentaDto>> GetDokumenty(int id,int? page, PagingInfo pagingInfo)
+        public async Task<IPagedList<DokumentKontrahentaDto>> GetDokumenty(int id,int? page, PagingInfo pagingInfo)
         {
-            var dokumentyKontrachenta = await _dbContext
-                .DokumentyKontrachenta
-                .Include(dk => dk.Kontrachent)
-                .Where(dk=>dk.IdKontrachenta == id)
+            var dokumentyKontrahenta = await _dbContext
+                .DokumentyKontrahenta
+                .Include(dk => dk.Kontrahent)
+                .Where(dk=>dk.IdKontrahenta == id)
                 .ToListAsync();
 
             switch (pagingInfo.SortOrder)
             {
                 case "name_desc":
-                    dokumentyKontrachenta = dokumentyKontrachenta.OrderByDescending(d => d.NazwaDokumentu).ToList();
+                    dokumentyKontrahenta = dokumentyKontrahenta.OrderByDescending(d => d.NazwaDokumentu).ToList();
                     break;
                 case "Name":
-                    dokumentyKontrachenta = dokumentyKontrachenta.OrderBy(d => d.NazwaDokumentu).ToList();
+                    dokumentyKontrahenta = dokumentyKontrahenta.OrderBy(d => d.NazwaDokumentu).ToList();
                     break;
                 default:
-                    dokumentyKontrachenta = dokumentyKontrachenta.OrderByDescending(d => d.IdDokumentuKontrachenta).ToList();
+                    dokumentyKontrahenta = dokumentyKontrahenta.OrderByDescending(d => d.IdDokumentuKontrahenta).ToList();
                     break;
             }
             if (pagingInfo.PageSize == 0)
@@ -218,13 +214,13 @@ namespace Ksiegowosc.Intranet.Services
                 pagingInfo.PageSize = 10;
             }
 
-            var dokumentyKontrachentaDto = _mapper.Map<List<DokumentKontrachentaDto>>(dokumentyKontrachenta);
+            var dokumentyKontrahentaDto = _mapper.Map<List<DokumentKontrahentaDto>>(dokumentyKontrahenta);
 
-            return await dokumentyKontrachentaDto.ToPagedListAsync(page ?? 1, pagingInfo.PageSize);
+            return await dokumentyKontrahentaDto.ToPagedListAsync(page ?? 1, pagingInfo.PageSize);
         }
         #endregion
         #region AddDokument
-        public async Task<FileDto> AddDokument(DokumentKontrachentaDto dto)
+        public async Task<FileDto> AddDokument(DokumentKontrahentaDto dto)
         {
             string fileName = null;
             string filePath = null;
@@ -234,22 +230,22 @@ namespace Ksiegowosc.Intranet.Services
                 .Dokumenty
                 .FindAsync(dto.IdSzablonu);
 
-            var kontrachent = await _dbContext
-                .Kontrachenci
+            var kontrahent = await _dbContext
+                .Kontrahenci
                 .Include(k=>k.Adres)
-                .FirstOrDefaultAsync(k=>k.IdKontrachenta == dto.IdKontrachenta);
+                .FirstOrDefaultAsync(k=>k.IdKontrahenta == dto.IdKontrahenta);
 
-            var kontrachentDto = new KontrachentDto()
+            var kontrahentDto = new KontrahentDto()
             {
-                NipLubPesel = kontrachent.NipLubPesel ?? "-",
-                Regon = kontrachent.Regon ?? "-",
-                Nazwa = kontrachent.Nazwa ?? "-",
-                SkrotNazwy = kontrachent.SkrotNazwy ?? "-",
-                NumerKonta = kontrachent.NumerKonta ?? "-",
-                Bank = kontrachent.Bank ?? "-",
-                Ulica = kontrachent.Adres.Ulica ?? "-",
-                Miasto = kontrachent.Adres.Miasto ?? "-",
-                KodPocztowy = kontrachent.Adres.KodPocztowy ?? "-"
+                NipLubPesel = kontrahent.NipLubPesel ?? "-",
+                Regon = kontrahent.Regon ?? "-",
+                Nazwa = kontrahent.Nazwa ?? "-",
+                SkrotNazwy = kontrahent.SkrotNazwy ?? "-",
+                NumerKonta = kontrahent.NumerKonta ?? "-",
+                Bank = kontrahent.Bank ?? "-",
+                Ulica = kontrahent.Adres.Ulica ?? "-",
+                Miasto = kontrahent.Adres.Miasto ?? "-",
+                KodPocztowy = kontrahent.Adres.KodPocztowy ?? "-"
             };
 
             if (dokument != null)
@@ -258,12 +254,12 @@ namespace Ksiegowosc.Intranet.Services
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + dokument.NazwaDokumentu +".doc";
                 filePath = Path.Combine(uploadsFolder, uniqueFileName);
                 fileName = dokument.NazwaDokumentu;
-                GenerateDocument(dokument.UrlDokumentu,filePath, kontrachentDto);
+                GenerateDocument(dokument.UrlDokumentu,filePath, kontrahentDto);
             }
 
-            var dokumentKontrachentaDto = new DokumentKontrachentaDto
+            var dokumentKontrahentaDto = new DokumentKontrahentaDto
             {
-                IdKontrachenta = kontrachent.IdKontrachenta,
+                IdKontrahenta = kontrahent.IdKontrahenta,
                 NazwaDokumentu = fileName,
                 UrlDokumentu = filePath
             };
@@ -271,11 +267,11 @@ namespace Ksiegowosc.Intranet.Services
             byte[] bytes = File.ReadAllBytes(dokument.UrlDokumentu);
             RunDocument(filePath);
 
-            var dokumentKontrachenta = _mapper.Map<DokumentKontrachenta>(dokumentKontrachentaDto);
-            _dbContext.DokumentyKontrachenta.Add(dokumentKontrachenta);
+            var dokumentKontrahenta = _mapper.Map<DokumentKontrahenta>(dokumentKontrahentaDto);
+            _dbContext.DokumentyKontrahenta.Add(dokumentKontrahenta);
             await _dbContext.SaveChangesAsync();
 
-            return new FileDto() { fileBytes = bytes, fileName = dokumentKontrachentaDto.NazwaDokumentu };
+            return new FileDto() { fileBytes = bytes, fileName = dokumentKontrahentaDto.NazwaDokumentu };
         }
         #endregion
         #region RunDocument
@@ -290,8 +286,8 @@ namespace Ksiegowosc.Intranet.Services
             process.WaitForExit();
         }
         #endregion
-        #region GenerateDokumentKontrachenta
-        public void GenerateDocument(string urlDokumentu,string filePath,KontrachentDto dto)
+        #region GenerateDokumentKontrahenta
+        public void GenerateDocument(string urlDokumentu,string filePath,KontrahentDto dto)
         {
             Document doc = new Document(urlDokumentu);
             doc.Range.Replace("@NipLubPesel@", dto.NipLubPesel, new FindReplaceOptions(FindReplaceDirection.Forward));
@@ -308,12 +304,12 @@ namespace Ksiegowosc.Intranet.Services
         #region DownloadDokument
         public async Task<FileDto> DownloadDokument(int? id)
         {
-            var dokumentKontrachenta = await _dbContext
-                .DokumentyKontrachenta
+            var dokumentKontrahenta = await _dbContext
+                .DokumentyKontrahenta
                 .FindAsync(id);
-            byte[] bytes = File.ReadAllBytes(dokumentKontrachenta.UrlDokumentu);
-            RunDocument(dokumentKontrachenta.UrlDokumentu);
-            return new FileDto() { fileBytes = bytes, fileName = dokumentKontrachenta.NazwaDokumentu };
+            byte[] bytes = File.ReadAllBytes(dokumentKontrahenta.UrlDokumentu);
+            RunDocument(dokumentKontrahenta.UrlDokumentu);
+            return new FileDto() { fileBytes = bytes, fileName = dokumentKontrahenta.NazwaDokumentu };
         }
         #endregion
     }

@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ksiegowosc.Data.Data
 {
-    public class Kontrachent
+    public class Kontrahent
     {
         [Key]
-        public int IdKontrachenta { get; set; }
+        public int IdKontrahenta { get; set; }
         public string NipLubPesel { get; set; }
         public string Regon { get; set; }
         public bool PlatnikVat { get; set; }
@@ -23,6 +19,6 @@ namespace Ksiegowosc.Data.Data
         public string NumerKonta { get; set; }
         public int IdAdresu { get; set; }
         public virtual Adres Adres { get; set; }
-        public virtual ICollection<DokumentKontrachenta> DokumentKontrachenta{ get; set; }
+        public virtual ICollection<DokumentKontrahenta> DokumentKontrahenta{ get; set; }
     }
 }

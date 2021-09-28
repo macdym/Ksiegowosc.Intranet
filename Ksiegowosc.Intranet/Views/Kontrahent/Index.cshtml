@@ -1,4 +1,4 @@
-﻿@model Ksiegowosc.Intranet.ViewModels.KontrachentViewModel
+﻿@model Ksiegowosc.Intranet.ViewModels.KontrahentViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -8,14 +8,14 @@
 <div class="row">
     <div class="col-7 pl-4">
         <div>
-            @await Html.PartialAsync("_KontrachentA")
+            @await Html.PartialAsync("_KontrahentA")
         </div>
 
         <div class="card">
-            @await Html.PartialAsync("_KontrachentB", Model.Kontrachenci)
+            @await Html.PartialAsync("_KontrahentB", Model.Kontrahenci)
         </div>
     </div>
     <div class="col-5 pr-4">
-        @await Html.PartialAsync("_KontrachentC")
+        @await Html.PartialAsync("_KontrahentC")
     </div>
 </div>

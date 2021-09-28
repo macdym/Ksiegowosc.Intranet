@@ -12,11 +12,11 @@ namespace Ksiegowosc.Intranet
     {
         public KsiegowoscMappingProfile()
         {
-            CreateMap<Kontrachent, KontrachentDto>()
+            CreateMap<Kontrahent, KontrahentDto>()
                 .ForMember(dto => dto.Ulica, c => c.MapFrom(s => s.Adres.Ulica))
                 .ForMember(dto => dto.Miasto, c => c.MapFrom(s => s.Adres.Miasto))
                 .ForMember(dto => dto.KodPocztowy, c => c.MapFrom(s => s.Adres.KodPocztowy));
-            CreateMap<KontrachentDto, Kontrachent>()
+            CreateMap<KontrahentDto, Kontrahent>()
                 .ForMember(m => m.Adres, c => c.MapFrom(dto => new Adres()
                 {
                     Ulica = dto.Ulica,
@@ -25,8 +25,8 @@ namespace Ksiegowosc.Intranet
                 }));
             CreateMap<Dokument, DokumentDto>();
             CreateMap<DokumentDto, Dokument>();
-            CreateMap<DokumentKontrachentaDto,DokumentKontrachenta>();
-            CreateMap<DokumentKontrachenta, DokumentKontrachentaDto>();
+            CreateMap<DokumentKontrahentaDto,DokumentKontrahenta>();
+            CreateMap<DokumentKontrahenta, DokumentKontrahentaDto>();
         }
     }
 }

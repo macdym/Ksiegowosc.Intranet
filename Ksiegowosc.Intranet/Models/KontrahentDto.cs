@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Ksiegowosc.Intranet.Models
 {
-    public class KontrachentDto
+    public class KontrahentDto
     {
-        public int IdKontrachenta { get; set; }
+        public int IdKontrahenta { get; set; }
         public string NipLubPesel { get; set; }
         public string Regon { get; set; }
         public bool PlatnikVat { get; set; }

@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace Ksiegowosc.Intranet.Models
 {
-    public class DokumentKontrachentaDto
+    public class DokumentKontrahentaDto
     {
-        //public int IdDokumentuKontrachenta { get; set; }
-        public int IdKontrachenta { get; set; }
+        public int IdKontrahenta { get; set; }
         public int IdSzablonu { get; set; }
         public string NazwaDokumentu { get; set; }
         public string UrlDokumentu { get; set; }

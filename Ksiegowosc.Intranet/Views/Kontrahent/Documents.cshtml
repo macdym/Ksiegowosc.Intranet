@@ -1,28 +1,27 @@
-﻿@model Ksiegowosc.Intranet.ViewModels.KontrachentViewModel
+﻿@model Ksiegowosc.Intranet.ViewModels.KontrahentViewModel
 @using X.PagedList.Mvc.Core;
-@using X.PagedList;
 
 @{
-    var dto = Model.KontrachentDto;
-    var pageDto = Model.DokumentyKontrachenta;
+    var dto = Model.KontrahentDto;
+    var pageDto = Model.DokumentyKontrahenta;
 }
 
 <div class="card-body m-2">
     <div class="card-header mb-3">
         <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist" style="cursor:pointer">
             <li class="nav-item" role="presentation">
-                <a class="nav-link text-dark text-decoration-none" onclick="Action(@dto.IdKontrachenta,'Kontrachent','Details')">Dane</a>
+                <a class="nav-link text-dark text-decoration-none" onclick="Action(@dto.IdKontrahenta,'Kontrahent','Details')">Dane</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link text-dark text-decoration-none active" onclick="Action(@dto.IdKontrachenta,'Kontrachent','Documents')">Dokumenty</a>
+                <a class="nav-link text-dark text-decoration-none active" onclick="Action(@dto.IdKontrahenta,'Kontrahent','Documents')">Dokumenty</a>
             </li>
         </ul>
     </div>
-    <form asp-action="AddDocument" asp-route-id="@dto.IdKontrachenta" >
+    <form asp-action="AddDocument" asp-route-id="@dto.IdKontrahenta" >
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="row">
             <div class="form-group col-8">
-                <select class="form-control form-select" asp-for="DokumentKontrachentaDto.IdSzablonu" asp-items="ViewBag.IdDokumentu"></select>
+                <select class="form-control form-select" asp-for="DokumentKontrahentaDto.IdSzablonu" asp-items="ViewBag.IdDokumentu"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Dodaj +" class="btn btn-success text-light float-right" />
@@ -31,7 +30,7 @@
     </form>
         <div class="row">
             <div class="col-2">
-                @using (Html.BeginForm("Index", "Kontrachent", FormMethod.Get))
+                @using (Html.BeginForm("Index", "Kontrahent", FormMethod.Get))
                 {
                     @Html.DropDownList("pagingInfo.PageSize", new List<SelectListItem>
                    {
@@ -48,13 +47,13 @@
                 <span>Dokumenty</span>
             </div>
             <div class="col-2 offset-3 mb-2">
-                @using (Html.BeginForm("Documents", "Kontrachent", FormMethod.Get))
+                @using (Html.BeginForm("Documents", "Kontrahent", FormMethod.Get))
                 {
                     @Html.TextBox("pagingInfo.SearchString", ViewBag.CurrentFilter as string, new { placeholder = "Szukaj", @class = "form-control search-input" })
                 }
             </div>
         </div>
-        <table id="dataTableDoc" class="table table-hover table-responsive rounded">
+        <table class="table table-hover table-responsive rounded">
             <thead class="thead-dark">
                 <tr>
                     <th data-resizable-column-id="docName" class="col-3 text-center" style="min-width: 200px;">
@@ -67,9 +66,9 @@
                 </tr>
             </thead>
             <tbody class="table-bordered">
-                @if (Model.DokumentyKontrachenta.Any())
+                @if (Model.DokumentyKontrahenta.Any())
                 {
-                    foreach (var item in Model.DokumentyKontrachenta)
+                    foreach (var item in Model.DokumentyKontrahenta)
                     {
                         <tr style="cursor:pointer">
                             <td class="text-center">

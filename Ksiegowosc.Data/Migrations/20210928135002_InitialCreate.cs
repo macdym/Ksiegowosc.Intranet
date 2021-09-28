@@ -37,10 +37,10 @@ namespace Ksiegowosc.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Kontrachenci",
+                name: "Kontrahenci",
                 columns: table => new
                 {
-                    IdKontrachenta = table.Column<int>(type: "int", nullable: false)
+                    IdKontrahenta = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NipLubPesel = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Regon = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -57,9 +57,9 @@ namespace Ksiegowosc.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Kontrachenci", x => x.IdKontrachenta);
+                    table.PrimaryKey("PK_Kontrahenci", x => x.IdKontrahenta);
                     table.ForeignKey(
-                        name: "FK_Kontrachenci_Adres_AdresIdAdresu",
+                        name: "FK_Kontrahenci_Adres_AdresIdAdresu",
                         column: x => x.AdresIdAdresu,
                         principalTable: "Adres",
                         principalColumn: "IdAdresu",
@@ -67,36 +67,36 @@ namespace Ksiegowosc.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DokumentyKontrachenta",
+                name: "DokumentyKontrahenta",
                 columns: table => new
                 {
-                    IdDokumentuKontrachenta = table.Column<int>(type: "int", nullable: false)
+                    IdDokumentuKontrahenta = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NazwaDokumentu = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UrlDokumentu = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DataDodania = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IdKontrachenta = table.Column<int>(type: "int", nullable: false),
-                    KontrachentIdKontrachenta = table.Column<int>(type: "int", nullable: true)
+                    IdKontrahenta = table.Column<int>(type: "int", nullable: false),
+                    KontrahentIdKontrahenta = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DokumentyKontrachenta", x => x.IdDokumentuKontrachenta);
+                    table.PrimaryKey("PK_DokumentyKontrahenta", x => x.IdDokumentuKontrahenta);
                     table.ForeignKey(
-                        name: "FK_DokumentyKontrachenta_Kontrachenci_KontrachentIdKontrachenta",
-                        column: x => x.KontrachentIdKontrachenta,
-                        principalTable: "Kontrachenci",
-                        principalColumn: "IdKontrachenta",
+                        name: "FK_DokumentyKontrahenta_Kontrahenci_KontrahentIdKontrahenta",
+                        column: x => x.KontrahentIdKontrahenta,
+                        principalTable: "Kontrahenci",
+                        principalColumn: "IdKontrahenta",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_DokumentyKontrachenta_KontrachentIdKontrachenta",
-                table: "DokumentyKontrachenta",
-                column: "KontrachentIdKontrachenta");
+                name: "IX_DokumentyKontrahenta_KontrahentIdKontrahenta",
+                table: "DokumentyKontrahenta",
+                column: "KontrahentIdKontrahenta");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Kontrachenci_AdresIdAdresu",
-                table: "Kontrachenci",
+                name: "IX_Kontrahenci_AdresIdAdresu",
+                table: "Kontrahenci",
                 column: "AdresIdAdresu");
         }
 
@@ -106,10 +106,10 @@ namespace Ksiegowosc.Data.Migrations
                 name: "Dokumenty");
 
             migrationBuilder.DropTable(
-                name: "DokumentyKontrachenta");
+                name: "DokumentyKontrahenta");
 
             migrationBuilder.DropTable(
-                name: "Kontrachenci");
+                name: "Kontrahenci");
 
             migrationBuilder.DropTable(
                 name: "Adres");

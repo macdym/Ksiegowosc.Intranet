@@ -9,17 +9,17 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Ksiegowosc.Intranet.Controllers
 {
     [Authorize]
-    public class KontrachentController : Controller
+    public class KontrahentController : Controller
     {
-        private readonly IKontrachentService _service;
+        private readonly IKontrahentService _service;
 
-        public KontrachentController(IKontrachentService service)
+        public KontrahentController(IKontrahentService service)
         {
             _service = service;
         }
 
-        // GET: Kontrachent
-        public async Task<IActionResult> Index(int? page, PagingInfo pagingInfo, FiltryKontrachentaDto filtry)
+        // GET: Kontrahent
+        public async Task<IActionResult> Index(int? page, PagingInfo pagingInfo, FiltryKontrahentaDto filtry)
         {
             ViewBag.CurrentSort = pagingInfo.SortOrder;
             ViewBag.NameSortParm = pagingInfo.SortOrder == "Name" ? "name_desc" : "Name";
@@ -32,13 +32,13 @@ namespace Ksiegowosc.Intranet.Controllers
 
             ViewBag.CurrentFilter = pagingInfo.SearchString;
 
-            var model = new KontrachentViewModel();
-            var kontrachenciDto = await _service.GetAll(page, pagingInfo, filtry);
-            model.Kontrachenci = kontrachenciDto;
+            var model = new KontrahentViewModel();
+            var kontrahenciDto = await _service.GetAll(page, pagingInfo, filtry);
+            model.Kontrahenci = kontrahenciDto;
 
             return View(model);
         }
-        // POST: Kontrachent/Delete/5
+        // POST: Kontrahent/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int? id)
@@ -47,46 +47,46 @@ namespace Ksiegowosc.Intranet.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Kontrachent/Details/5
+        // GET: Kontrahent/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var model = new KontrachentViewModel();
-            var kontrachentDto = await _service.GetKontrachentDto(id);
-            model.KontrachentDto = kontrachentDto;
+            var model = new KontrahentViewModel();
+            var kontrahentDto = await _service.GetKontrahentDto(id);
+            model.KontrahentDto = kontrahentDto;
 
             return PartialView(model);
         }
-        // GET: Kontrachent/CreateOrEdit
+        // GET: Kontrahent/CreateOrEdit
         public async Task<IActionResult> CreateOrEdit(int? id)
         {
             if (id is null)
             {
                 return PartialView();
             }
-            var model = new KontrachentViewModel();
-            var kontrachentDto = await _service.GetKontrachentDto(id);
-            model.KontrachentDto = kontrachentDto;
+            var model = new KontrahentViewModel();
+            var kontrahentDto = await _service.GetKontrahentDto(id);
+            model.KontrahentDto = kontrahentDto;
 
             return PartialView(model);
         }
-        // POST: Kontrachent/CreateOrEdit/5?
+        // POST: Kontrahent/CreateOrEdit/5?
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateOrEdit([Bind("IdKontrachenta,NipLubPesel, Regon, PlatnikVat, Nazwa, SkrotNazwy, Dostawca, Odbiorca, Zalezny, Bank, NumerKonta, Ulica, Miasto, KodPocztowy")] KontrachentDto KontrachentDto)
+        public async Task<IActionResult> CreateOrEdit([Bind("IdKontrahenta,NipLubPesel, Regon, PlatnikVat, Nazwa, SkrotNazwy, Dostawca, Odbiorca, Zalezny, Bank, NumerKonta, Ulica, Miasto, KodPocztowy")] KontrahentDto KontrahentDto)
         {
-            int? id = KontrachentDto.IdKontrachenta;
+            int? id = KontrahentDto.IdKontrahenta;
             if (id == null)
             {
-                await _service.Create(KontrachentDto);
+                await _service.Create(KontrahentDto);
             }
             else
             {
-                await _service.Update(KontrachentDto);
+                await _service.Update(KontrahentDto);
             }
 
             return RedirectToAction(nameof(Index));
         }
-        // GET: Kontrachent/Documents
+        // GET: Kontrahent/Documents
         public async Task<IActionResult> Documents(int id, int? page, PagingInfo pagingInfo)
         {
             ViewBag.CurrentSort = pagingInfo.SortOrder;
@@ -95,24 +95,22 @@ namespace Ksiegowosc.Intranet.Controllers
             var szablony = await _service.GetSzablony();
             ViewData["IdDokumentu"] = new SelectList(szablony, "IdDokumentu", "NazwaDokumentu");
 
-            var model = new KontrachentViewModel();
-            var dokumentyKontrachentaDto = await _service.GetDokumenty(id,page, pagingInfo);
-            var kontrachentDto = await _service.GetKontrachentDto(id);
-            model.DokumentyKontrachenta = dokumentyKontrachentaDto;
-            model.KontrachentDto = kontrachentDto;
+            var model = new KontrahentViewModel();
+            var dokumentyKontrahentaDto = await _service.GetDokumenty(id,page, pagingInfo);
+            var kontrahentDto = await _service.GetKontrahentDto(id);
+            model.DokumentyKontrahenta = dokumentyKontrahentaDto;
+            model.KontrahentDto = kontrahentDto;
 
             return PartialView(model);
-            //return File()
         }
-        // POST: Kontrachent/AddDocument
+        // POST: Kontrahent/AddDocument
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddDocument(int id,DokumentKontrachentaDto DokumentKontrachentaDto)
+        public async Task<IActionResult> AddDocument(int id,DokumentKontrahentaDto DokumentKontrahentaDto)
         {
-            DokumentKontrachentaDto.IdKontrachenta = id;
-            var fileDto = await _service.AddDokument(DokumentKontrachentaDto);
+            DokumentKontrahentaDto.IdKontrahenta = id;
+            var fileDto = await _service.AddDokument(DokumentKontrahentaDto);
             return File(fileDto.fileBytes, "application/doc", $"{fileDto.fileName}.doc");
-            //zrobic pobieranie osobno
         }
     }
 }

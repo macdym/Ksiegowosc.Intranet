@@ -1,9 +1,9 @@
-﻿@model X.PagedList.IPagedList<KontrachentDto>
+﻿@model X.PagedList.IPagedList<KontrahentDto>
 @using X.PagedList.Mvc.Core;
 @using X.PagedList;
 
 <div class="mt-2 ml-3">
-    <a class="btn btn-primary text-light pl-4 pr-4" onclick="Action(null,'Kontrachent','CreateOrEdit')">Dodaj</a>
+    <a class="btn btn-primary text-light pl-4 pr-4" onclick="Action(null,'Kontrahent','CreateOrEdit')">Dodaj</a>
 </div>
 
 @*<form asp-action="AddDocument" asp-route-id="@dto.IdKontrachenta">
@@ -21,7 +21,7 @@
 <div class="card-body">
     <div class="row">
         <div class="col-2">
-            @using (Html.BeginForm("Index", "Kontrachent", FormMethod.Get))
+            @using (Html.BeginForm("Index", "Kontrahent", FormMethod.Get))
             {
                 @Html.DropDownList("pagingInfo.PageSize", new List<SelectListItem>
                {
@@ -35,10 +35,10 @@
             <span>@(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount (rekordów: @Model.TotalItemCount)</span>
         </div>
         <div class="text-center col-4 pt-2">
-            <span>Kontrachenci</span>
+            <span>Kontrahenci</span>
         </div>
         <div class="col-2 offset-2 mb-2">
-            @using (Html.BeginForm("Index", "Kontrachent", FormMethod.Get))
+            @using (Html.BeginForm("Index", "Kontrahent", FormMethod.Get))
             {
                 @Html.TextBox("pagingInfo.SearchString", ViewBag.CurrentFilter as string, new { placeholder = "Szukaj", @class = "form-control search-input" })
             }
@@ -89,7 +89,7 @@
             {
                 foreach (var item in Model)
                 {
-                    <tr style="cursor:pointer" onclick="Action(@item.IdKontrachenta,'Kontrachent','Details');">
+                    <tr style="cursor:pointer" onclick="Action(@item.IdKontrahenta,'Kontrahent','Details');">
                         <td class="text-center">
                             @Html.DisplayFor(modelItem => item.NipLubPesel)
                         </td>
@@ -115,22 +115,22 @@
                             @*title="<br>Dodano przez: @item.CreatedByName </br><br>Data dodania: @item.CreateDate </br>
                                 <br>Modyfikowano przez:@item.EditedByName </br><br>Data modyfykacji: @item.EditDate</br>">*@
 
-                            <form asp-action="Delete" asp-route-id="@item.IdKontrachenta">
+                            <form asp-action="Delete" asp-route-id="@item.IdKontrahenta">
 
-                                <button type="button" style="width:30px;" onclick="Action(@item.IdKontrachenta,'Kontrachent','CreateOrEdit');" class="btn-sm btn-light"><i class="fa fa-pencil-alt text-info"></i></button>
+                                <button type="button" style="width:30px;" onclick="Action(@item.IdKontrahenta,'Kontrahent','CreateOrEdit');" class="btn-sm btn-light"><i class="fa fa-pencil-alt text-info"></i></button>
 
                                 <button type="button" style="width:30px;" class="btn-sm btn-light" data-html="true" data-toggle="tooltip" data-placement="right">
                                     <i class="fa fa-info small text-success"></i>
                                 </button>
 
                                 <button type="submit" style="width:30px;" class="btn-sm btn-light"
-                                        onclick="return confirm('Czy na pewno chcesz usunąć kontrachenta?')">
+                                        onclick="return confirm('Czy na pewno chcesz usunąć kontrahenta?')">
                                     <i class="fa fa-trash-alt small text-danger"></i>
                                 </button>
 
                             </form>
                         </td>
-                        <td><input type="checkbox" style="cursor:pointer" name="ids" value="@item.IdKontrachenta" /></td>
+                        <td><input type="checkbox" style="cursor:pointer" name="ids" value="@item.IdKontrahenta" /></td>
                     </tr>
                 }
             }

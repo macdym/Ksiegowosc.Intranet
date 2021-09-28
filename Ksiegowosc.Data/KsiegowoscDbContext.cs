@@ -13,9 +13,9 @@ namespace Ksiegowosc.Data
         public KsiegowoscDbContext(DbContextOptions<KsiegowoscDbContext> options):base(options)
         {
         }
-        public DbSet<Kontrachent> Kontrachenci { get; set; }
+        public DbSet<Kontrahent> Kontrahenci { get; set; }
         public DbSet<Dokument> Dokumenty { get; set; }
         public DbSet<Adres> Adres { get; set; }
-        public DbSet<DokumentKontrachenta> DokumentyKontrachenta { get; set; }
+        public DbSet<DokumentKontrahenta> DokumentyKontrahenta { get; set; }
     }    
 }

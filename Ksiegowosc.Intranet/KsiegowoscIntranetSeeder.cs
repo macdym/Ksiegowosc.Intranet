@@ -19,20 +19,20 @@ namespace Ksiegowosc.Intranet
         {
             if(_dbContext.Database.CanConnect())
             {
-                if(!_dbContext.Kontrachenci.Any())
+                if(!_dbContext.Kontrahenci.Any())
                 {
-                    var kontrachenci = GetKontrachenci();
-                    _dbContext.Kontrachenci.AddRange(kontrachenci);
+                    var kontrahenci = GetKontrahenci();
+                    _dbContext.Kontrahenci.AddRange(kontrahenci);
                     _dbContext.SaveChanges();
                 }
             }
         }
-        #region GetKontrachenci
-        private IEnumerable<Kontrachent> GetKontrachenci()
+        #region GetKontrahenci
+        private IEnumerable<Kontrahent> GetKontrahenci()
         {
-            var result = new List<Kontrachent>()
+            var result = new List<Kontrahent>()
             {
-                new Kontrachent()
+                new Kontrahent()
                 {
                     NipLubPesel="12345678901",
                     Nazwa="Firma 1",
@@ -48,7 +48,7 @@ namespace Ksiegowosc.Intranet
                         KodPocztowy = "Kodpocztowy1"
                     }
                 },
-                new Kontrachent()
+                new Kontrahent()
                 {
                     NipLubPesel="12345678901",
                     Nazwa="Firma 2",
@@ -64,7 +64,7 @@ namespace Ksiegowosc.Intranet
                         KodPocztowy = "Kodpocztowy2"
                     }
                 },
-                new Kontrachent()
+                new Kontrahent()
                 {
                     NipLubPesel="12345678901",
                     Nazwa="Firma 3",
@@ -80,7 +80,7 @@ namespace Ksiegowosc.Intranet
                         KodPocztowy = "Kodpocztowy3"
                     }
                 },
-                new Kontrachent()
+                new Kontrahent()
                 {
                     NipLubPesel="10987654321",
                     Nazwa="Osoba 1",

@@ -29,7 +29,7 @@ namespace Ksiegowosc.Intranet
                 options.UseSqlServer(Configuration.GetConnectionString("KsiegowoscDb")));
             services.AddAutoMapper(this.GetType().Assembly);
             services.AddScoped<KsiegowoscIntranetSeeder>();
-            services.AddScoped<IKontrachentService, KontrachentService>();
+            services.AddScoped<IKontrahentService, KontrahentService>();
             services.AddScoped<IDokumentService, DokumentService>();
         }
 
