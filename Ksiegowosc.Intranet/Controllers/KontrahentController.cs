@@ -29,8 +29,10 @@ namespace Ksiegowosc.Intranet.Controllers
             ViewBag.ZaleznySortParm = pagingInfo.SortOrder == "Zalezny" ? "zalezny_desc" : "Zalezny";
             ViewBag.BankSortParm = pagingInfo.SortOrder == "Bank" ? "bank_desc" : "Bank";
             ViewBag.MiastoSortParm = pagingInfo.SortOrder == "Miasto" ? "miasto_desc" : "Miasto";
-
             ViewBag.CurrentFilter = pagingInfo.SearchString;
+
+            var szablony = await _service.GetSzablony();
+            ViewData["IdDokumentu"] = new SelectList(szablony, "IdDokumentu", "NazwaDokumentu");
 
             var model = new KontrahentViewModel();
             var kontrahenciDto = await _service.GetAll(page, pagingInfo, filtry);

@@ -1,134 +1,136 @@
-﻿@model X.PagedList.IPagedList<KontrahentDto>
+﻿@model Ksiegowosc.Intranet.ViewModels.KontrahentViewModel
 @using X.PagedList.Mvc.Core;
-@using X.PagedList;
 
-<div class="mt-2 ml-3">
-    <a class="btn btn-primary text-light pl-4 pr-4" onclick="Action(null,'Kontrahent','CreateOrEdit')">Dodaj</a>
-</div>
+@{
+    var pageDto = Model.Kontrahenci;
+}
 
-@*<form asp-action="AddDocument" asp-route-id="@dto.IdKontrachenta">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="row">
-        <div class="form-group col-8">
-            <select class="form-control form-select" asp-for="DokumentKontrachentaDto.IdSzablonu" asp-items="ViewBag.IdDokumentu"></select>
+@using (Html.BeginForm("DownloadManyDokument", "Kontrahent", FormMethod.Post))
+{
+    <div class="card-body">
+        <div class="row">
+            <div class="col-2">
+                <a class="btn btn-primary text-light btn-block" style="min-width:100%;" onclick="Action(null,'Kontrahent','CreateOrEdit')">Dodaj</a>
+            </div>
+            <div class="form-group offset-3 col-5">
+                <select class="form-control form-select d-flex" asp-for="DokumentKontrahentaDto.IdSzablonu" asp-items="ViewBag.IdDokumentu" aria-label="Default select example"><option selected>Wybierz dokument kontrachenta...</option></select>
+            </div>
+            <div class="form-group col-2">
+                <input type="submit" value="Pobierz" class="btn btn-success text-light btn-block" />
+            </div>
         </div>
-        <div class="form-group">
-            <input type="submit" value="Dodaj +" class="btn btn-success text-light float-right" />
-        </div>
-    </div>
-</form>*@
 
-<div class="card-body">
-    <div class="row">
-        <div class="col-2">
-            @using (Html.BeginForm("Index", "Kontrahent", FormMethod.Get))
-            {
-                @Html.DropDownList("pagingInfo.PageSize", new List<SelectListItem>
-               {
-                    new SelectListItem(){Text="10",Value="10", Selected=true},
-                    new SelectListItem(){Text="20",Value="20"},
-                    new SelectListItem(){Text="30",Value="30"}
-               }, new { @class = "form-select", onchange = "this.form.submit()" })
-            }
-        </div>
-        <div class="col-2 pt-2">
-            <span>@(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount (rekordów: @Model.TotalItemCount)</span>
-        </div>
-        <div class="text-center col-4 pt-2">
-            <span>Kontrahenci</span>
-        </div>
-        <div class="col-2 offset-2 mb-2">
-            @using (Html.BeginForm("Index", "Kontrahent", FormMethod.Get))
-            {
-                @Html.TextBox("pagingInfo.SearchString", ViewBag.CurrentFilter as string, new { placeholder = "Szukaj", @class = "form-control search-input" })
-            }
-        </div>
-    </div>
-    <table id="dataTable" class="table table-hover table-responsive rounded">
-        <thead class="thead-dark">
-            <tr>
-                <th data-resizable-column-id="nip" class="text-center">
-                    Nip lub pesel
-                </th>
-                <th data-resizable-column-id="nazwa" class="text-center">
-                    <div class="d-block">
-                        @Html.ActionLink("Nazwa", "Index", new { sortOrder = ViewBag.NameSortParm }, new { @class = "text-light text-decoration-none d-block" })
-                    </div>
-                </th>
-                <th data-resizable-column-id="vat" class="text-center">
-                    <div class="d-block">
-                        @Html.ActionLink("VAT", "Index", new { sortOrder = ViewBag.VatSortParm }, new { @class = "text-light text-decoration-none d-block" })
-                    </div>
-                </th>
-                <th data-resizable-column-id="odbiorca" class="text-center">
-                    <div class="d-block">
-                        @Html.ActionLink("Odbiorca", "Index", new { sortOrder = ViewBag.OdbiorcaSortParm }, new { @class = "text-light text-decoration-none d-block" })
-                    </div>
-                </th>
-                <th data-resizable-column-id="dostawca" class="text-center">
-                    <div class="d-block">
-                        @Html.ActionLink("Dostawca", "Index", new { sortOrder = ViewBag.DostawcaSortParm }, new { @class = "text-light text-decoration-none d-block" })
-                    </div>
-                </th>
-                <th data-resizable-column-id="zalezny" class="text-center">
-                    <div class="d-block">
-                        @Html.ActionLink("Zalezny", "Index", new { sortOrder = ViewBag.ZaleznySortParm }, new { @class = "text-light text-decoration-none d-block" })
-                    </div>
-                </th>
-                <th data-resizable-column-id="bank" class="text-center">
-                    <div class="d-block">
-                        @Html.ActionLink("Bank", "Index", new { sortOrder = ViewBag.BankSortParm }, new { @class = "text-light text-decoration-none d-block" })
-                    </div>
-                </th>
-                <th></th>
-                <th style="min-width: 50px;"></th>
-            </tr>
-        </thead>
-        <tbody class="table-bordered">
-            @if (Model.Any())
-            {
-                foreach (var item in Model)
+        <div class="row">
+            <div class="col-2">
+                @using (Html.BeginForm("Index", "Kontrahent", FormMethod.Get))
                 {
-                    <tr style="cursor:pointer" onclick="Action(@item.IdKontrahenta,'Kontrahent','Details');">
-                        <td class="text-center">
-                            @Html.DisplayFor(modelItem => item.NipLubPesel)
-                        </td>
-                        <td class="text-center">
-                            @Html.DisplayFor(modelItem => item.Nazwa)
-                        </td>
-                        <td class="text-center">
-                            @Html.DisplayFor(modelItem => item.PlatnikVat)
-                        </td>
-                        <td class="text-center">
-                            @Html.DisplayFor(modelItem => item.Odbiorca)
-                        </td>
-                        <td class="text-center">
-                            @Html.DisplayFor(modelItem => item.Dostawca)
-                        </td>
-                        <td class="text-center">
-                            @Html.DisplayFor(modelItem => item.Zalezny)
-                        </td>
-                        <td class="text-center">
-                            @Html.DisplayFor(modelItem => item.Bank)
-                        </td>
-                        <td class="text-center">
-                            <form asp-action="Delete" asp-route-id="@item.IdKontrahenta">
+                    @Html.DropDownList("pagingInfo.PageSize", new List<SelectListItem>
+                   {
+                        new SelectListItem(){Text="10",Value="10", Selected=true},
+                        new SelectListItem(){Text="20",Value="20"},
+                        new SelectListItem(){Text="30",Value="30"}
+                   }, new { @class = "form-select", onchange = "this.form.submit()" })
+                }
+            </div>
+            <div class="col-2 pt-2">
+                <span>@(pageDto.PageCount < pageDto.PageNumber ? 0 : pageDto.PageNumber) / @pageDto.PageCount (rekordów: @pageDto.TotalItemCount)</span>
+            </div>
+            <div class="text-center col-4 pt-2">
+                <span>Kontrahenci</span>
+            </div>
+            <div class="col-2 offset-2 mb-2">
+                @using (Html.BeginForm("Index", "Kontrahent", FormMethod.Get))
+                {
+                    @Html.TextBox("pagingInfo.SearchString", ViewBag.CurrentFilter as string, new { placeholder = "Szukaj", @class = "form-control search-input" })
+                }
+            </div>
+        </div>
+        <table id="dataTable" class="table table-hover table-responsive rounded">
+            <thead class="thead-dark">
+                <tr>
+                    <th data-resizable-column-id="nip" class="text-center">
+                        Nip lub pesel
+                    </th>
+                    <th data-resizable-column-id="nazwa" class="text-center">
+                        <div class="d-block">
+                            @Html.ActionLink("Nazwa", "Index", new { sortOrder = ViewBag.NameSortParm }, new { @class = "text-light text-decoration-none d-block" })
+                        </div>
+                    </th>
+                    <th data-resizable-column-id="vat" class="text-center">
+                        <div class="d-block">
+                            @Html.ActionLink("VAT", "Index", new { sortOrder = ViewBag.VatSortParm }, new { @class = "text-light text-decoration-none d-block" })
+                        </div>
+                    </th>
+                    <th data-resizable-column-id="odbiorca" class="text-center">
+                        <div class="d-block">
+                            @Html.ActionLink("Odbiorca", "Index", new { sortOrder = ViewBag.OdbiorcaSortParm }, new { @class = "text-light text-decoration-none d-block" })
+                        </div>
+                    </th>
+                    <th data-resizable-column-id="dostawca" class="text-center">
+                        <div class="d-block">
+                            @Html.ActionLink("Dostawca", "Index", new { sortOrder = ViewBag.DostawcaSortParm }, new { @class = "text-light text-decoration-none d-block" })
+                        </div>
+                    </th>
+                    <th data-resizable-column-id="zalezny" class="text-center">
+                        <div class="d-block">
+                            @Html.ActionLink("Zalezny", "Index", new { sortOrder = ViewBag.ZaleznySortParm }, new { @class = "text-light text-decoration-none d-block" })
+                        </div>
+                    </th>
+                    <th data-resizable-column-id="bank" class="text-center">
+                        <div class="d-block">
+                            @Html.ActionLink("Bank", "Index", new { sortOrder = ViewBag.BankSortParm }, new { @class = "text-light text-decoration-none d-block" })
+                        </div>
+                    </th>
+                    <th></th>
+                    <th style="min-width: 50px;"></th>
+                </tr>
+            </thead>
+            <tbody class="table-bordered">
+                @if (pageDto.Any())
+                {
+                    foreach (var item in pageDto)
+                    {
+                        <tr style="cursor:pointer" onclick="Action(@item.IdKontrahenta,'Kontrahent','Details');">
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.NipLubPesel)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.Nazwa)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.PlatnikVat)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.Odbiorca)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.Dostawca)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.Zalezny)
+                            </td>
+                            <td class="text-center">
+                                @Html.DisplayFor(modelItem => item.Bank)
+                            </td>
+                            <td class="text-center">
+                                <form asp-action="Delete" asp-route-id="@item.IdKontrahenta">
                                     <a onclick="Action(@item.IdKontrahenta,'Kontrahent','CreateOrEdit')"><i class="fa fa-pencil-alt text-info mr-2"></i></a>
                                     <a data-html="true" data-toggle="tooltip" data-placement="right"><i class="fa fa-info small text-success"></i></a>
                                     <input type="hidden" />
                                     <a href="#" onclick="this.parentNode.submit()"><i class="fa fa-trash-alt small text-danger ml-2"></i></a>
-                            </form>
-                        </td>
-                        <td class="text-center">
-                            <input type="checkbox" style="cursor:pointer" name="ids" value="@item.IdKontrahenta" />
-                        </td>
-                    </tr>
+                                </form>
+                            </td>
+                            <td class="text-center">
+                                <input type="checkbox" style="cursor:pointer" name="ids" value="@item.IdKontrahenta" />
+                            </td>
+                        </tr>
+                    }
                 }
-            }
-        </tbody>
-    </table>
-    <div class="float-right mr-1">
-        @Html.PagedListPager(Model, page => Url.Action("Index",
-            new { page, SortOrder = ViewBag.CurrentSort, CurrentFilter = ViewBag.CurrentFilter }))
+            </tbody>
+        </table>
+        <div class="float-right mr-1">
+            @Html.PagedListPager(pageDto, page => Url.Action("Index",
+                 new { page, SortOrder = ViewBag.CurrentSort, CurrentFilter = ViewBag.CurrentFilter }))
+        </div>
     </div>
-</div>
+}
