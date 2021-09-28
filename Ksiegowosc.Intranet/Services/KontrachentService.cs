@@ -268,12 +268,12 @@ namespace Ksiegowosc.Intranet.Services
                 UrlDokumentu = filePath
             };
 
+            byte[] bytes = File.ReadAllBytes(dokument.UrlDokumentu);
+            RunDocument(filePath);
+
             var dokumentKontrachenta = _mapper.Map<DokumentKontrachenta>(dokumentKontrachentaDto);
             _dbContext.DokumentyKontrachenta.Add(dokumentKontrachenta);
             await _dbContext.SaveChangesAsync();
-
-            byte[] bytes = File.ReadAllBytes(dokument.UrlDokumentu);
-            RunDocument(filePath);
 
             return new FileDto() { fileBytes = bytes, fileName = dokumentKontrachentaDto.NazwaDokumentu };
         }

@@ -54,7 +54,7 @@
                 }
             </div>
         </div>
-        <table id="dataTable" class="table table-hover table-responsive rounded">
+        <table id="dataTableDoc" class="table table-hover table-responsive rounded">
             <thead class="thead-dark">
                 <tr>
                     <th data-resizable-column-id="docName" class="col-3 text-center" style="min-width: 200px;">
@@ -77,15 +77,16 @@
                             </td>
                             <td class="text-center">
                                 @*dodac kontrachenta*@
-                                @*<a asp-action="DownloadContractorDocument" asp-controller="Document" asp-route-docId="@item.IdDokumentu" asp-route-id="@Model"><i class="fa fa-file-download text-dark"></i></a>*@
+                                @*<a asp-action="DownloadContractorDocument" asp-controller="Document" asp-route-id="@Model.DokumentKontrachentaDto.IdKontrachenta"><i class="fa fa-file-download text-dark"></i></a>*@
+                                <i class="fa fa-file-download text-dark"></i>
                             </td>
                             <td class="text-center">
-                                @*<a asp-action="Edit" asp-route-id="@item.IdDokumentu"><i class="fa fa-pencil-alt text-info"></i></a>*@
+                                @*<a asp-action="Edit" asp-route-id="@Model.DokumentKontrachentaDto.IdKontrachenta"><i class="fa fa-pencil-alt text-info"></i></a>*@
 
                                 <a class="pl-3 pr-3" data-html="true" data-toggle="tooltip" data-placement="right" title="<br />Dodano przez:  <br />Data dodania: <br />Modyfikowano przez: <br />Data modyfykacji: ">
                                     <i class="fa fa-info text-success"></i>
                                 </a>
-                                @*<a asp-action="Delete" asp-route-id="@item.IdDokumentu"><i class="fa fa-trash text-danger"></i></a>*@
+                                @*<a asp-action="Delete" asp-route-id="@Model.DokumentKontrachentaDto.IdKontrachenta"><i class="fa fa-trash text-danger"></i></a>*@
                             </td>
                         </tr>
                     }
