@@ -133,11 +133,17 @@ namespace Ksiegowosc.Intranet.Controllers
             var fileDto = await _service.DownloadDokument(id);
             return File(fileDto.fileBytes, "application/doc", $"{fileDto.fileName}.doc");
         }
-        // GET: Kontrahent/AddAndDownloadDocumenty
-        public async Task<IActionResult> AddAndDownloadDokumenty(int[] ids, DokumentKontrahentaDto DokumentKontrahentaDto)
+        // GET: Kontrahent/AddAndDownloadDocumentyDoc
+        public async Task<IActionResult> DownloadDokumentyDoc(int[] ids, DokumentKontrahentaDto DokumentKontrahentaDto)
         {
-            var fileDto = await _service.DownloadDokumenty(ids,DokumentKontrahentaDto);
-            return File(fileDto.fileBytes, "application/doc", $"{fileDto.fileName}.doc");
+            var fileDto =await _service.DownloadDokumentyDoc(ids, DokumentKontrahentaDto);
+            return File(fileDto.fileBytes, "application/octet-stream", $"Kontrachenci_Doc.zip");
+        }
+        // GET: Kontrahent/AddAndDownloadDocumentyZip
+        public async Task<IActionResult> DownloadDokumentyZip(int[] ids, DokumentKontrahentaDto DokumentKontrahentaDto)
+        {
+            var zipStream = await _service.DownloadDokumentyZip(ids, DokumentKontrahentaDto);
+            return File(zipStream, "application/octet-stream", $"Kontrachenci_ZIP.zip");
         }
     }
 }

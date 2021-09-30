@@ -14,6 +14,7 @@ using System.Diagnostics;
 using Aspose.Words;
 using Aspose.Words.Replacing;
 using Microsoft.AspNetCore.Http;
+using System.IO.Compression;
 
 namespace Ksiegowosc.Intranet.Services
 {
@@ -28,9 +29,10 @@ namespace Ksiegowosc.Intranet.Services
         Task<IEnumerable<DokumentDto>> GetSzablony();
         Task<FileDto> AddDokument(DokumentKontrahentaDto dto);
         Task<FileDto> DownloadDokument(int? id);
-        Task<FileDto> DownloadDokumenty(int[] ids, DokumentKontrahentaDto dto);
         Task EditDokument(int? id);
         Task DeleteDokument(int? id);
+        Task<Stream> DownloadDokumentyZip(int[] ids, DokumentKontrahentaDto dto);
+        Task<FileDto> DownloadDokumentyDoc(int[] ids, DokumentKontrahentaDto dto);
     }
 
     public class KontrahentService : IKontrahentService
@@ -38,13 +40,216 @@ namespace Ksiegowosc.Intranet.Services
         private readonly KsiegowoscDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _webHostEnvironment;
-
+        #region KontrahentServiceConstrucor
         public KontrahentService(KsiegowoscDbContext dbContext, IMapper mapper, IWebHostEnvironment webHostEnvironment)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _webHostEnvironment = webHostEnvironment;
         }
+        #endregion
+
+        //Dodaj wiele dokumentów kontrahenta
+        #region AddDokumenty
+        public async Task AddDokumenty(int[] ids, DokumentKontrahentaDto dto)
+        {
+            string fileName = null;
+            string filePath = null;
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "UploadedFiles");
+            string uniqueFileName;
+
+            var szablonDokumentu = await _dbContext.
+                Dokumenty
+                .FindAsync(dto.IdSzablonu);
+
+            var kontrahenci = await _dbContext
+                .Kontrahenci
+                .Include(k => k.Adres)
+                .ToListAsync();
+
+            var kontrahenciDto = _mapper.Map<List<KontrahentDto>>(kontrahenci);
+
+            var query = from kontrahent in kontrahenciDto
+                        join id in ids
+                        on kontrahent.IdKontrahenta equals id
+                        select new KontrahentDto()
+                        {
+                            IdKontrahenta = kontrahent.IdKontrahenta,
+                            NipLubPesel = kontrahent.NipLubPesel ?? "-",
+                            Regon = kontrahent.Regon ?? "-",
+                            Nazwa = kontrahent.Nazwa ?? "-",
+                            SkrotNazwy = kontrahent.SkrotNazwy ?? "-",
+                            NumerKonta = kontrahent.NumerKonta ?? "-",
+                            Bank = kontrahent.Bank ?? "-",
+                            Ulica = kontrahent.Ulica ?? "-",
+                            KodPocztowy = kontrahent.KodPocztowy ?? "-",
+                            Miasto = kontrahent.Miasto ?? "-"
+                        };
+
+            var dokumentyKontrachentaDto = new List<DokumentKontrahentaDto>();
+
+            foreach (var kontrahentDto in query)
+            {
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + $"{szablonDokumentu.NazwaDokumentu}_{kontrahentDto.Nazwa}" + ".doc";
+                filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                fileName = szablonDokumentu.NazwaDokumentu;
+                GenerateDokument(szablonDokumentu.UrlDokumentu, filePath, kontrahentDto);
+                dokumentyKontrachentaDto.Add(
+                    new DokumentKontrahentaDto()
+                    {
+                        IdKontrahenta = kontrahentDto.IdKontrahenta,
+                        NazwaDokumentu = fileName,
+                        UrlDokumentu = filePath
+                    });
+            }
+            var dokumentyKontrachenta = _mapper.Map<List<DokumentKontrahenta>>(dokumentyKontrachentaDto);
+            _dbContext.DokumentyKontrahenta.AddRange(dokumentyKontrachenta);
+            await _dbContext.SaveChangesAsync();              
+        }
+        #endregion
+        //Pobierz wiele dokumentów kontrahenta w formacie ZIP
+        #region DownloadDokumentyZip
+        public async Task<Stream> DownloadDokumentyZip(int[] ids, DokumentKontrahentaDto dto)
+        {
+            string fileName = null;
+            string filePath = null;
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "UploadedFiles");
+            string uniqueFileName;
+
+            var szablonDokumentu = await _dbContext.
+                Dokumenty
+                .FindAsync(dto.IdSzablonu);
+
+            var kontrahenci = await _dbContext
+                .Kontrahenci
+                .Include(k => k.Adres)
+                .ToListAsync();
+
+            var kontrahenciDto = _mapper.Map<List<KontrahentDto>>(kontrahenci);
+
+            var query = from kontrahent in kontrahenciDto
+                        join id in ids
+                        on kontrahent.IdKontrahenta equals id
+                        select new KontrahentDto()
+                        {
+                            IdKontrahenta = kontrahent.IdKontrahenta,
+                            NipLubPesel = kontrahent.NipLubPesel ?? "-",
+                            Regon = kontrahent.Regon ?? "-",
+                            Nazwa = kontrahent.Nazwa ?? "-",
+                            SkrotNazwy = kontrahent.SkrotNazwy ?? "-",
+                            NumerKonta = kontrahent.NumerKonta ?? "-",
+                            Bank = kontrahent.Bank ?? "-",
+                            Ulica = kontrahent.Ulica ?? "-",
+                            KodPocztowy = kontrahent.KodPocztowy ?? "-",
+                            Miasto = kontrahent.Miasto ?? "-"
+                        };
+
+            var dokumentyKontrachentaDto = new List<DokumentKontrahentaDto>();
+
+            foreach (var kontrahentDto in query)
+            {
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + $"{szablonDokumentu.NazwaDokumentu}_{kontrahentDto.Nazwa}" + ".doc";
+                filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                fileName = szablonDokumentu.NazwaDokumentu;
+                GenerateDokument(szablonDokumentu.UrlDokumentu, filePath, kontrahentDto);
+                dokumentyKontrachentaDto.Add(
+                    new DokumentKontrahentaDto()
+                    {
+                        IdKontrahenta = kontrahentDto.IdKontrahenta,
+                        NazwaDokumentu = fileName,
+                        UrlDokumentu = filePath
+                    });
+            }
+            var dokumentyKontrachenta = _mapper.Map<List<DokumentKontrahenta>>(dokumentyKontrachentaDto);
+            _dbContext.DokumentyKontrahenta.AddRange(dokumentyKontrachenta);
+            await _dbContext.SaveChangesAsync();
+
+            var zipStream = new MemoryStream();
+
+            using (var zip = new ZipArchive(zipStream, ZipArchiveMode.Create, true))
+            {
+                foreach (var zipItem in dokumentyKontrachentaDto)
+                {
+                    byte[] byteArray = File.ReadAllBytes(zipItem.UrlDokumentu);
+                    var stream = new MemoryStream(byteArray);
+                    var entry = zip.CreateEntry(zipItem.NazwaDokumentu + ".doc");
+                    using (var entryStream = entry.Open())
+                    {
+                        stream.CopyTo(entryStream);
+                    }
+                }
+            }
+            zipStream.Position = 0;
+            return zipStream;
+        }
+        #endregion
+        //Pobierz wiele dokumentów kontrahenta w formacie DOC
+        #region DownloadDokumentyDoc
+        public async Task<FileDto> DownloadDokumentyDoc(int[] ids, DokumentKontrahentaDto dto)
+        {
+            string fileName = null;
+            string filePath = null;
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "UploadedFiles");
+            string uniqueFileName;
+
+            var szablonDokumentu = await _dbContext.
+                Dokumenty
+                .FindAsync(dto.IdSzablonu);
+
+            var kontrahenci = await _dbContext
+                .Kontrahenci
+                .Include(k => k.Adres)
+                .ToListAsync();
+
+            var kontrahenciDto = _mapper.Map<List<KontrahentDto>>(kontrahenci);
+
+            var query = from kontrahent in kontrahenciDto
+                        join id in ids
+                        on kontrahent.IdKontrahenta equals id
+                        select new KontrahentDto()
+                        {
+                            IdKontrahenta = kontrahent.IdKontrahenta,
+                            NipLubPesel = kontrahent.NipLubPesel ?? "-",
+                            Regon = kontrahent.Regon ?? "-",
+                            Nazwa = kontrahent.Nazwa ?? "-",
+                            SkrotNazwy = kontrahent.SkrotNazwy ?? "-",
+                            NumerKonta = kontrahent.NumerKonta ?? "-",
+                            Bank = kontrahent.Bank ?? "-",
+                            Ulica = kontrahent.Ulica ?? "-",
+                            KodPocztowy = kontrahent.KodPocztowy ?? "-",
+                            Miasto = kontrahent.Miasto ?? "-"
+                        };
+
+            var dokumentyKontrachentaDto = new List<DokumentKontrahentaDto>();
+
+            foreach (var kontrahentDto in query)
+            {
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + $"{szablonDokumentu.NazwaDokumentu}_{kontrahentDto.Nazwa}" + ".doc";
+                filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                fileName = szablonDokumentu.NazwaDokumentu;
+                GenerateDokument(szablonDokumentu.UrlDokumentu, filePath, kontrahentDto);
+                dokumentyKontrachentaDto.Add(
+                    new DokumentKontrahentaDto()
+                    {
+                        IdKontrahenta = kontrahentDto.IdKontrahenta,
+                        NazwaDokumentu = fileName,
+                        UrlDokumentu = filePath
+                    });
+            }
+            var dokumentyKontrachenta = _mapper.Map<List<DokumentKontrahenta>>(dokumentyKontrachentaDto);
+            _dbContext.DokumentyKontrahenta.AddRange(dokumentyKontrachenta);
+            await _dbContext.SaveChangesAsync();
+
+            uniqueFileName = Guid.NewGuid().ToString() + "_" + szablonDokumentu.NazwaDokumentu + ".doc";
+            filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            GenerateManyDokument(szablonDokumentu.UrlDokumentu, filePath, query.ToList());
+            byte[] bytes = File.ReadAllBytes(filePath);
+            RunDokument(filePath);
+            File.Delete(filePath);
+            return new FileDto() { fileBytes = bytes, fileName = uniqueFileName };
+        }
+        #endregion
+        //Usuwanie kontrahenta
         #region Delete
         public async Task Delete(int? id)
         {
@@ -56,6 +261,7 @@ namespace Ksiegowosc.Intranet.Services
             await _dbContext.SaveChangesAsync();
         }
         #endregion
+        //Tworzenie kontrahenta
         #region Create
         public async Task Create(KontrahentDto dto)
         {
@@ -64,6 +270,7 @@ namespace Ksiegowosc.Intranet.Services
             await _dbContext.SaveChangesAsync();
         }
         #endregion
+        //Edycja kontrahenta
         #region Edit
         public async Task Update(KontrahentDto dto)
         {
@@ -72,6 +279,7 @@ namespace Ksiegowosc.Intranet.Services
             await _dbContext.SaveChangesAsync();
         }
         #endregion
+        //Get wszyscy kontrahenci
         #region GetAll
         public async Task<IPagedList<KontrahentDto>> GetAll(int? page, PagingInfo pagingInfo, FiltryKontrahentaDto filtry)
         {
@@ -170,6 +378,7 @@ namespace Ksiegowosc.Intranet.Services
             return await kontrahenciDto.ToPagedListAsync(page ?? 1, pagingInfo.PageSize);
         }
         #endregion
+        //Get kontrahentDto
         #region GetKontrahentDto
         public async Task<KontrahentDto> GetKontrahentDto(int? id)
         {
@@ -182,6 +391,7 @@ namespace Ksiegowosc.Intranet.Services
             return kontrahentDto;
         }
         #endregion
+        //Get szablon dokumentu
         #region GetSzablony
         public async Task<IEnumerable<DokumentDto>> GetSzablony()
         {
@@ -193,6 +403,7 @@ namespace Ksiegowosc.Intranet.Services
             return dokumentyDto;
         }
         #endregion
+        //Get dokumentyKontrhenta
         #region GetDokumenty
         public async Task<IPagedList<DokumentKontrahentaDto>> GetDokumenty(int id, int? page, PagingInfo pagingInfo)
         {
@@ -224,6 +435,7 @@ namespace Ksiegowosc.Intranet.Services
             return await dokumentyKontrahentaDto.ToPagedListAsync(page ?? 1, pagingInfo.PageSize);
         }
         #endregion
+        //Dodaj dokumentKontrahenta
         #region AddDokument
         public async Task<FileDto> AddDokument(DokumentKontrahentaDto dto)
         {
@@ -279,6 +491,7 @@ namespace Ksiegowosc.Intranet.Services
             return new FileDto() { fileBytes = bytes, fileName = dokumentKontrahentaDto.NazwaDokumentu };
         }
         #endregion
+        //Edytuj dokumentKontrahenta
         #region EditDokument
         public async Task EditDokument(int? id)
         {
@@ -289,6 +502,7 @@ namespace Ksiegowosc.Intranet.Services
             RunDokument(dokument.UrlDokumentu);
         }
         #endregion
+        //Usun dokumentKontrahenta
         #region DeleteDokument
         public async Task DeleteDokument(int? id)
         {
@@ -298,6 +512,19 @@ namespace Ksiegowosc.Intranet.Services
             await _dbContext.SaveChangesAsync();
         }
         #endregion
+        //Pobierz pojedynczy dokument kontrahenta
+        #region DownloadDokument
+        public async Task<FileDto> DownloadDokument(int? id)
+        {
+            var dokumentKontrahenta = await _dbContext
+                .DokumentyKontrahenta
+                .FindAsync(id);
+            byte[] bytes = File.ReadAllBytes(dokumentKontrahenta.UrlDokumentu);
+            RunDokument(dokumentKontrahenta.UrlDokumentu);
+            return new FileDto() { fileBytes = bytes, fileName = dokumentKontrahenta.NazwaDokumentu };
+        }
+        #endregion
+        //Uruchom dokument
         #region RunDokument
         private void RunDokument(string filePath)
         {
@@ -310,98 +537,7 @@ namespace Ksiegowosc.Intranet.Services
             process.WaitForExit();
         }
         #endregion
-        #region GenerateDokumentKontrahenta
-        public void GenerateDokument(string urlDokumentu, string filePath, KontrahentDto dto)
-        {
-            Document doc = new Document(urlDokumentu);
-            doc.Range.Replace("@NipLubPesel@", dto.NipLubPesel, new FindReplaceOptions(FindReplaceDirection.Forward));
-            doc.Range.Replace("@Regon@", dto.Regon, new FindReplaceOptions(FindReplaceDirection.Forward));
-            doc.Range.Replace("@Nazwa@", dto.Nazwa, new FindReplaceOptions(FindReplaceDirection.Forward));
-            doc.Range.Replace("@NumerKonta@", dto.NumerKonta, new FindReplaceOptions(FindReplaceDirection.Forward));
-            doc.Range.Replace("@Bank@", dto.Bank, new FindReplaceOptions(FindReplaceDirection.Forward));
-            doc.Range.Replace("@Ulica@", dto.Ulica, new FindReplaceOptions(FindReplaceDirection.Forward));
-            doc.Range.Replace("@KodPocztowy@", dto.KodPocztowy, new FindReplaceOptions(FindReplaceDirection.Forward));
-            doc.Range.Replace("@Miasto@", dto.Miasto, new FindReplaceOptions(FindReplaceDirection.Forward));
-            doc.Save(filePath);
-        }
-        #endregion
-        #region DownloadDokument
-        public async Task<FileDto> DownloadDokument(int? id)
-        {
-            var dokumentKontrahenta = await _dbContext
-                .DokumentyKontrahenta
-                .FindAsync(id);
-            byte[] bytes = File.ReadAllBytes(dokumentKontrahenta.UrlDokumentu);
-            RunDokument(dokumentKontrahenta.UrlDokumentu);
-            return new FileDto() { fileBytes = bytes, fileName = dokumentKontrahenta.NazwaDokumentu };
-        }
-        #endregion
-        #region DownloadDokumenty
-        public async Task<FileDto> DownloadDokumenty(int[] ids, DokumentKontrahentaDto dto)
-        {
-            string fileName = null;
-            string filePath = null;
-            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "UploadedFiles");
-            string uniqueFileName;
-
-            var szablonDokumentu = await _dbContext.
-                Dokumenty
-                .FindAsync(dto.IdSzablonu);
-
-            var kontrahenci = await _dbContext
-                .Kontrahenci
-                .Include(k => k.Adres)
-                .ToListAsync();
-
-            var kontrahenciDto = _mapper.Map<List<KontrahentDto>>(kontrahenci);
-
-            var query = from kontrahent in kontrahenciDto
-                        join id in ids
-                        on kontrahent.IdKontrahenta equals id
-                        select new KontrahentDto()
-                        {
-                            IdKontrahenta = kontrahent.IdKontrahenta,
-                            NipLubPesel = kontrahent.NipLubPesel ?? "-",
-                            Regon = kontrahent.Regon ?? "-",
-                            Nazwa = kontrahent.Nazwa ?? "-",
-                            SkrotNazwy = kontrahent.SkrotNazwy ?? "-",
-                            NumerKonta = kontrahent.NumerKonta ?? "-",
-                            Bank = kontrahent.Bank ?? "-",
-                            Ulica = kontrahent.Ulica ?? "-",
-                            KodPocztowy = kontrahent.KodPocztowy ?? "-",
-                            Miasto = kontrahent.Miasto ?? "-"
-                        };
-
-            var dokumentyKontrachentaDto = new List<DokumentKontrahentaDto>();
-
-            foreach (var kontrahentDto in query)
-            {
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + $"{szablonDokumentu.NazwaDokumentu}_{kontrahentDto.Nazwa}" + ".doc";
-                filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                fileName = szablonDokumentu.NazwaDokumentu;                
-                GenerateDokument(szablonDokumentu.UrlDokumentu, filePath, kontrahentDto);
-                dokumentyKontrachentaDto.Add(
-                    new DokumentKontrahentaDto()
-                    {
-                        IdKontrahenta = kontrahentDto.IdKontrahenta,
-                        NazwaDokumentu = fileName,
-                        UrlDokumentu = filePath
-                    });
-            }
-            var dokumentyKontrachenta = _mapper.Map <List<DokumentKontrahenta>>(dokumentyKontrachentaDto);
-            _dbContext.DokumentyKontrahenta.AddRange(dokumentyKontrachenta);
-            await _dbContext.SaveChangesAsync();
-
-            uniqueFileName = Guid.NewGuid().ToString() + "_" + szablonDokumentu.NazwaDokumentu + ".doc";
-            filePath = Path.Combine(uploadsFolder, uniqueFileName);
-            GenerateManyDokument(szablonDokumentu.UrlDokumentu, filePath, query.ToList());
-
-            byte[] bytes = File.ReadAllBytes(filePath);
-            RunDokument(filePath);
-            File.Delete(filePath);
-            return new FileDto() { fileBytes = bytes, fileName = uniqueFileName };
-        }
-        #endregion
+        //Wygeneruj wiele dokumentów kontrahenta
         #region GenerateManyDokument
         public void GenerateManyDokument(string urlDokumentu, string filePath, List<KontrahentDto> dtos)
         {
@@ -423,6 +559,21 @@ namespace Ksiegowosc.Intranet.Services
             }
         }
         #endregion
-
+        //Wygeneruj pojedynczy dokument kontrahenta
+        #region GenerateDokumentKontrahenta
+        public void GenerateDokument(string urlDokumentu, string filePath, KontrahentDto dto)
+        {
+            Document doc = new Document(urlDokumentu);
+            doc.Range.Replace("@NipLubPesel@", dto.NipLubPesel, new FindReplaceOptions(FindReplaceDirection.Forward));
+            doc.Range.Replace("@Regon@", dto.Regon, new FindReplaceOptions(FindReplaceDirection.Forward));
+            doc.Range.Replace("@Nazwa@", dto.Nazwa, new FindReplaceOptions(FindReplaceDirection.Forward));
+            doc.Range.Replace("@NumerKonta@", dto.NumerKonta, new FindReplaceOptions(FindReplaceDirection.Forward));
+            doc.Range.Replace("@Bank@", dto.Bank, new FindReplaceOptions(FindReplaceDirection.Forward));
+            doc.Range.Replace("@Ulica@", dto.Ulica, new FindReplaceOptions(FindReplaceDirection.Forward));
+            doc.Range.Replace("@KodPocztowy@", dto.KodPocztowy, new FindReplaceOptions(FindReplaceDirection.Forward));
+            doc.Range.Replace("@Miasto@", dto.Miasto, new FindReplaceOptions(FindReplaceDirection.Forward));
+            doc.Save(filePath);
+        }
+        #endregion
     }
 }
