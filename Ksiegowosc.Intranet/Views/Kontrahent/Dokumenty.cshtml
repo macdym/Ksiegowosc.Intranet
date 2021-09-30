@@ -13,11 +13,11 @@
                 <a class="nav-link text-dark text-decoration-none" onclick="Action(@dto.IdKontrahenta,'Kontrahent','Details')">Dane</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link text-dark text-decoration-none active" onclick="Action(@dto.IdKontrahenta,'Kontrahent','Documents')">Dokumenty</a>
+                <a class="nav-link text-dark text-decoration-none active" onclick="Action(@dto.IdKontrahenta,'Kontrahent','Dokumenty')">Dokumenty</a>
             </li>
         </ul>
     </div>
-    <form asp-action="AddDocument" asp-route-id="@dto.IdKontrahenta" >
+    <form asp-action="AddDokument" asp-route-id="@dto.IdKontrahenta" >
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="row">
             <div class="form-group col-8">
@@ -78,8 +78,8 @@
                                 <a asp-action="DownloadDokument" asp-route-id="@item.IdDokumentuKontrahenta"><i class="fa fa-file-download text-dark"></i></a>
                             </td>
                             <td class="text-center">
-                                <form asp-action="Delete" asp-route-id="@item.IdDokumentuKontrahenta">
-                                    <a onclick="Action(@item.IdDokumentuKontrahenta,'Kontrahent','CreateOrEdit')"><i class="fa fa-pencil-alt text-info mr-2"></i></a>
+                                <form asp-action="DeleteDokument" asp-route-id="@item.IdDokumentuKontrahenta">
+                                    <a onclick="Action(@item.IdDokumentuKontrahenta,'Kontrahent','EditDokument')"><i class="fa fa-pencil-alt text-info mr-2"></i></a>
                                     <a data-html="true" data-toggle="tooltip" data-placement="right"><i class="fa fa-info small text-success"></i></a>
                                     <input type="hidden" />
                                     <a href="#" onclick="this.parentNode.submit()"><i class="fa fa-trash-alt small text-danger ml-2"></i></a>

@@ -88,8 +88,8 @@ namespace Ksiegowosc.Intranet.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        // GET: Kontrahent/Documents
-        public async Task<IActionResult> Documents(int id, int? page, PagingInfo pagingInfo)
+        // GET: Kontrahent/Dokumenty
+        public async Task<IActionResult> Dokumenty(int id, int? page, PagingInfo pagingInfo)
         {
             ViewBag.CurrentSort = pagingInfo.SortOrder;
             ViewBag.NameSortParm = pagingInfo.SortOrder == "Name" ? "name_desc" : "Name";
@@ -105,19 +105,38 @@ namespace Ksiegowosc.Intranet.Controllers
 
             return PartialView(model);
         }
-        // POST: Kontrahent/AddDocument
+        // POST: Kontrahent/AddDokument
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddDocument(int id,DokumentKontrahentaDto DokumentKontrahentaDto)
+        public async Task<IActionResult> AddDokument(int id,DokumentKontrahentaDto DokumentKontrahentaDto)
         {
             DokumentKontrahentaDto.IdKontrahenta = id;
             var fileDto = await _service.AddDokument(DokumentKontrahentaDto);
             return File(fileDto.fileBytes, "application/doc", $"{fileDto.fileName}.doc");
         }
-        // GET: Kontrahent/DownloadDocument
+        //POST: Dokument/EditDokument/5
+        public async Task EditDokument(int? id)
+        {
+            await _service.EditDokument(id);
+        }
+        // POST: Dokument/DeleteDokument/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteDokument(int? id)
+        {
+            await _service.DeleteDokument(id);
+            return RedirectToAction(nameof(Index));
+        }
+        // GET: Kontrahent/DownloadDokument
         public async Task<IActionResult> DownloadDokument(int id)
         {
             var fileDto = await _service.DownloadDokument(id);
+            return File(fileDto.fileBytes, "application/doc", $"{fileDto.fileName}.doc");
+        }
+        // GET: Kontrahent/AddAndDownloadDocumenty
+        public async Task<IActionResult> AddAndDownloadDokumenty(int[] ids, DokumentKontrahentaDto DokumentKontrahentaDto)
+        {
+            var fileDto = await _service.DownloadDokumenty(ids,DokumentKontrahentaDto);
             return File(fileDto.fileBytes, "application/doc", $"{fileDto.fileName}.doc");
         }
     }
