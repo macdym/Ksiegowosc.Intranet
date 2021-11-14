@@ -2,7 +2,7 @@
 maciej.dyminski@yahoo.com
 
 ## General info
-This project is web intranet. Created to learn ASP.NET Core MVC, CRUD operations, Depedency Injection.
+Created to learn ASP.NET Core MVC, CRUD operations, Depedency Injection.
 	
 ## Technologies
 Project is created with:
