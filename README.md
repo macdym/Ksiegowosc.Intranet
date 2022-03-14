@@ -1,8 +1,5 @@
 # Ksiegowosc.Intranet
 maciej.dyminski@yahoo.com
-
-## General info
-Created to learn ASP.NET Core MVC, CRUD operations, Depedency Injection.
 	
 ## Technologies
 Project is created with:
